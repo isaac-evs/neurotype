@@ -2,7 +2,7 @@ import multer, { diskStorage } from "multer";
 
 const storage = diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "uploads/"); // Specify the folder to store files
+    cb(null, "public/"); // Specify the folder to store files
   },
   filename: function (req, file, cb) {
     const ext = file.originalname.split(".").pop(); // Get the file extension
@@ -11,4 +11,6 @@ const storage = diskStorage({
   },
 });
 
-export default storage;
+const upload = multer({ storage });
+
+export default upload;
