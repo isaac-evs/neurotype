@@ -3,7 +3,7 @@ import multer, { diskStorage, FileFilterCallback } from "multer";
 
 const storage = diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "public/"); // Specify the folder to store files
+    cb(null, "public/"); // Specicefy the folder to store files
   },
   filename: function (req, file, cb) {
     const ext = file.originalname.split(".").pop()?.toLowerCase(); // Get the file extension
@@ -15,6 +15,7 @@ const storage = diskStorage({
 // Filter files to only allow images
 const fileFilter = (
   req: Request,
+
   file: Express.Multer.File,
   cb: FileFilterCallback,
 ) => {

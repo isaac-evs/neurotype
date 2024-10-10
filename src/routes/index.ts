@@ -8,7 +8,7 @@ router.get("", (req, res) => {
 });
 
 router.post("/upload", upload.single("file"), (req, res) => {
-  // Log the uploaded file details
+  // Log the uploaded filedetails
   if (req.file) {
     res.send("File uploaded succesfully");
   } else {
