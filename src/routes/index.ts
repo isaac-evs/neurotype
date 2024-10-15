@@ -16,7 +16,8 @@ router.post("/login", login);
 router.get("/home", auth, getProfile);
 router.get("/", auth, authorize(["pro"]), getUsers);
 
-router.post("/upload", upload.single("file"), (req, res) => {
+/* Upload Image */
+router.post("/upload", upload.single("image"), (req, res) => {
   // Log the uploaded filedetails
   if (req.file) {
     res.send("File uploaded succesfully");
