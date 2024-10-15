@@ -27,7 +27,7 @@ app.use(express.json());
 /* routes */
 app.use("/assets", express.static(path.join(__dirname, "..", "public")));
 
-app.use("/api/users", routes);
+app.use("/api", routes);
 
 /* Start Server */
 app.listen(port, () => {
