@@ -2,7 +2,6 @@
 import express from "express";
 import cors from "cors";
 import helmet from "helmet";
-import mongoose from "mongoose";
 import dotenv from "dotenv";
 import connectDB from "./config/database";
 import routes from "./routes/index";
@@ -28,7 +27,7 @@ app.use(express.json());
 /* routes */
 app.use("/assets", express.static(path.join(__dirname, "..", "public")));
 
-app.use(routes);
+app.use("/api/users", routes);
 
 /* Start Server */
 app.listen(port, () => {
