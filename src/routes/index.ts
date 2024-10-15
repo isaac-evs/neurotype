@@ -10,10 +10,10 @@ import { auth, authorize } from "../middlewares/auth";
 
 const router = Router();
 
-/* Routes */
+/* User Routes*/
 router.post("/signup", signup);
 router.post("/login", login);
-router.get("/profile", auth, getProfile);
+router.get("/home", auth, getProfile);
 router.get("/", auth, authorize(["pro"]), getUsers);
 
 router.post("/upload", upload.single("file"), (req, res) => {
