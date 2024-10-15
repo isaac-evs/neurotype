@@ -10,6 +10,7 @@ import { auth, authorize } from "../middlewares/auth";
 
 const router = Router();
 
+/* Routes */
 router.post("/signup", signup);
 router.post("/login", login);
 router.get("/profile", auth, getProfile);

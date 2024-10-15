@@ -1,11 +1,14 @@
+/* Import neccesary modules and dependencies */
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 import User, { IUser } from "../models/userModel";
 
+/* Extender Request to include optional user property for authentication  */
 export interface AuthRequest extends Request {
   user?: IUser;
 }
 
+/* Auth: Extracts jwt, decodes it and search it in the database*/
 export const auth = async (
   req: AuthRequest,
   res: Response,
@@ -34,6 +37,7 @@ export const auth = async (
   }
 };
 
+/* Authorize: Extract role and validates it*/
 export const authorize = (roles: string[]) => {
   return (req: AuthRequest, res: Response, next: NextFunction): void => {
     if (!req.user) {

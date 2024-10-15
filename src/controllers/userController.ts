@@ -1,14 +1,17 @@
+/* Import Neccesary modules */
 import { Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import User, { IUser } from "../models/userModel";
 import { AuthRequest } from "../middlewares/auth";
 
+/* Generate Token */
 const generateToken = (user: IUser): string => {
   return jwt.sign({ _id: user._id }, process.env.JWT_SECRET as string, {
     expiresIn: "24h",
   });
 };
 
+/* Creates a new user and generates a new token */
 export const signup = async (req: Request, res: Response): Promise<void> => {
   try {
     const user = new User(req.body);
@@ -20,6 +23,7 @@ export const signup = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
+/* Handles User login by searching user by email in database, if is valid generates token */
 export const login = async (req: Request, res: Response): Promise<void> => {
   try {
     const { email, password } = req.body;
@@ -38,6 +42,7 @@ export const login = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
+/* Fetchs the user profile */
 export const getProfile = async (
   req: AuthRequest,
   res: Response,
@@ -49,6 +54,7 @@ export const getProfile = async (
   }
 };
 
+/* Fetches all users */
 export const getUsers = async (
   req: AuthRequest,
   res: Response,
