@@ -27,7 +27,7 @@ This is the backend for the Neuro Type application, a tool for processing clinic
 
 - POST `/api/users/signup`: Create a new user
 - POST `/api/users/login`: Log in an existing user
-- GET `/api/users/profile`: Get the user's profile
+- GET `/api/users/home`: Get the user's home
 - GET `/api/users`: Gets all users
 
 ## Technologies Used
