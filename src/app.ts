@@ -6,6 +6,7 @@ import dotenv from "dotenv";
 import connectDB from "./config/database";
 import routes from "./routes/index";
 import path from "path";
+import setupSwaggerDocs from "./swaggerDocs";
 
 /* Load Environment Variables */
 dotenv.config();
@@ -28,6 +29,9 @@ app.use(express.json());
 app.use("/assets", express.static(path.join(__dirname, "..", "public")));
 
 app.use("/api", routes);
+
+// Set up Swagger
+setupSwaggerDocs(app);
 
 /* Start Server */
 app.listen(port, () => {

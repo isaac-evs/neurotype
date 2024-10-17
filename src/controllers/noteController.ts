@@ -1,4 +1,4 @@
-/* Import Neccesary modules */
+/* Import Neccesary modules */ 
 import { Response } from "express";
 import Note, { INote } from "../models/noteModel";
 import { AuthRequest } from "../middlewares/auth";
