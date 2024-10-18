@@ -67,4 +67,37 @@ export const getUsers = async (
   }
 };
 
-/* To do: Update user, Delete User */
+
+/* Update user details */
+export const updateUser = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { id } = req.params;
+    const updates = req.body;
+    const user = await User.findByIdAndUpdate(id, updates, { new: true, runValidators: true });
+    
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.status(200).json({ message: "User updated successfully", user });
+  } catch (error) {
+    res.status(400).json({ message: "Error updating user", error });
+  }
+};
+
+/* Delete a user */
+export const deleteUser = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { id } = req.params;
+    const user = await User.findByIdAndDelete(id);
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    res.status(200).json({ message: "User deleted successfully" });
+  } catch (error) {
+    res.status(400).json({ message: "Error deleting user", error });
+  }
+};
+
