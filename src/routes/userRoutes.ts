@@ -4,6 +4,8 @@ import {
   login,
   getProfile,
   getUsers,
+  updateUser,
+  deleteUser,
 } from "../controllers/userController";
 import { auth, authorize } from "../middlewares/auth";
 
@@ -164,9 +166,66 @@ const router = Router();
  *         description: Error fetching users
  */
 
+
+/**
+ * @swagger
+ * /users/{id}:
+ *   put:
+ *     summary: Update a user's details
+ *     tags: [Users]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The user ID
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               name:
+ *                 type: string
+ *               email:
+ *                 type: string
+ *               role:
+ *                 type: string
+ *     responses:
+ *       200:
+ *         description: User updated successfully
+ *       404:
+ *         description: User not found
+ */
+
+
+/**
+ * @swagger
+ * /users/{id}:
+ *   delete:
+ *     summary: Delete a user by ID
+ *     tags: [Users]
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         schema:
+ *           type: string
+ *         required: true
+ *         description: The user ID
+ *     responses:
+ *       200:
+ *         description: User deleted successfully
+ *       404:
+ *         description: User not found
+ */
+
 router.post("/signup", signup);
 router.post("/login", login);
 router.get("/home", auth, getProfile);
 router.get("/", auth, authorize(["pro"]), getUsers);
+router.put("/users/:id", auth, authorize(["admin", "pro"]), updateUser);
+router.delete("/users/:id", auth, authorize(["admin"]), deleteUser);
 
 export default router;
