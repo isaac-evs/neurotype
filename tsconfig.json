@@ -1,8 +1,9 @@
 {
-  "include": ["./src/**/*.ts"],
+  "include": ["./src/**/*"],
   "compilerOptions": {
     "target": "ES2022",
-    "outDir": "dist",
+    "outDir": "./dist",
+    "rootDir": ".",
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
     "noImplicitAny": true,
