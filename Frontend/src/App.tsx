@@ -1,17 +1,18 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
-import LoginPage from "./pages/login";
 import MainLayout from "./pages/mainLayout";
 import { useState } from "react";
+import LoginLayout from "./layouts/loginLayout";
+
 
 function App() {
   // Simulamos si el usuario está autenticado.
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthenticated] = useState(false);
 
   return (
     <Router>
       <Routes>
         {/* Ruta del Login */}
-        <Route path="/login" element={<LoginPage onLogin={() => setIsAuthenticated(true)} />} />
+        <Route path="/login" element={<LoginLayout />} />
 
         {/* Ruta protegida con un wrapper */}
         <Route
