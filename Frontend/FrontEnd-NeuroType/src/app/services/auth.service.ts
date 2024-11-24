@@ -1,15 +1,18 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnInit } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
-export class AuthService {
+export class AuthService implements OnInit {
   private tokenSubject = new BehaviorSubject<string | null>(null);
   public token$ = this.tokenSubject.asObservable();
 
 
   constructor() {
+  }
+
+  ngOnInit(): void {
     const storedToken = localStorage.getItem('token');
     this.tokenSubject.next(storedToken); 
   }
