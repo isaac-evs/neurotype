@@ -1,0 +1,85 @@
+.main {
+    background-color: #F4F2F2;
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  box-sizing: border-box;
+  padding-left: 15vh;
+  padding-top: 8vh;
+  .leftSide {
+    display: flex;
+    flex-direction: column;
+    gap: 4vh;
+    .back {
+        cursor: pointer;
+        display: flex;
+        color: var(--third-color);
+        align-items: center;
+      svg {
+        height: 3vh;
+      }
+      span{
+        margin-left: -1vh;
+        font-size: 3vh;
+      }
+    }
+
+    &:nth-child(1){
+
+        font-size: 7vh;
+    }
+
+    form{
+        margin-top: 2vh;
+        display: flex;
+        flex-direction: column;
+        width: 80%;
+        gap: 4vh;
+        input{
+            height: 6vh;
+            border: 1px solid black;
+            &:focus{
+              outline: none;
+            }
+            &::placeholder{
+                padding-left: 3vh;
+                font-size: 2vh;
+            }
+            &.ng-invalid.ng-dirty{
+              border: 2px solid red;
+            }
+        }
+        button{
+            width: 50%;
+            height: 6vh;
+            border-radius: 5vh;
+            background-color: black;
+            color: white;
+            margin-top: 1vh;
+            font-weight: 600;
+
+            &:disabled{
+              background-color: gray;
+              border: 1px gray solid;
+            }
+        }
+
+    }
+  }
+  .rightSide {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    img{
+        height: 85vh;
+    }
+  }
+}
+
+.container {
+  width: 50%;
+}
+
+.badForm{
+  display: block;
+}
