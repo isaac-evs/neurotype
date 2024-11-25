@@ -1,0 +1,87 @@
+<div class="main">
+    <div class="firstRow">
+        <div class="date">
+            <span>August 12 - 2024</span>
+        </div>
+        <div class="textInput">
+            <form [formGroup]="form">
+                <textarea name="note" id="description" [placeholder]="placeHolder" formControlName="note"></textarea>
+            </form>
+        </div>
+        <div class="icons">
+            <span id="savedMessage">{{savedMessage}}</span>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" fill="currentcolor">
+                <path
+                    d="M440-200h80v-167l64 64 56-57-160-160-160 160 57 56 63-63v167ZM240-80q-33 0-56.5-23.5T160-160v-640q0-33 23.5-56.5T240-880h320l240 240v480q0 33-23.5 56.5T720-80H240Zm280-520v-200H240v640h480v-440H520ZM240-800v200-200 640-640Z" />
+            </svg>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" fill="currentcolor">
+                <path
+                    d="M280-240v-480h80v480h-80ZM440-80v-800h80v800h-80ZM120-400v-160h80v160h-80Zm480 160v-480h80v480h-80Zm160-160v-160h80v160h-80Z" />
+            </svg>
+        </div>
+    </div>
+    <div class="secondRow">
+        <div class="todayFeel">
+            <span>Today I Feel</span>
+            <div>
+                <img src="Today.png" alt="today">
+                <span id="feeling">SERENE</span>
+            </div>
+
+        </div>
+        <div class="tokens">
+            <span>Tokens Detected</span>
+            <div class="tokensContainer">
+                <div class="tokensNumber">
+                    <svg width="106" height="114" viewBox="0 0 106 114" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M95.7261 2.04935C100.601 -1.16523 106.681 2.90475 105.39 8.51735L90.6199 72.6851C89.5818 77.1953 84.316 79.4102 80.5786 76.9086L39.6182 49.4926C35.8809 46.9911 36.079 41.3843 39.9961 38.8011L95.7261 2.04935Z"
+                            fill="#F6DD73" />
+                        <path
+                            d="M3.843 57.3309C-1.11084 54.6979 -0.139385 47.2636 5.38684 45.5163L68.5672 25.5404C73.0079 24.1363 77.2463 27.6266 76.6492 32.196L70.1052 82.2745C69.5081 86.8439 64.4602 89.5493 60.4794 87.4335L3.843 57.3309Z"
+                            fill="#F6DD73" />
+                        <path
+                            d="M95.5265 106.063C95.8336 111.741 89.0889 115.285 84.8078 111.695L35.8626 70.6493C32.4224 67.7644 33.2001 62.1813 37.3456 60.0032L82.7789 36.1308C86.9244 33.9526 91.7677 36.5821 92.0146 41.145L95.5265 106.063Z"
+                            fill="#F6DD73" />
+                    </svg>
+                    <span>8</span>
+                </div>
+                <div class="tokensNumber">
+                    <svg width="101" height="100" viewBox="0 0 101 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M35.7553 73.6489C34.3336 57.8229 45.7268 43.9136 61.2027 42.5816C76.6785 41.2496 90.3766 52.9993 91.7983 68.8253C93.2199 84.6513 81.8267 98.5605 66.3509 99.8925C50.875 101.225 37.1769 89.4748 35.7553 73.6489Z"
+                            fill="url(#paint0_linear_12_886)" />
+                        <path
+                            d="M44.2199 44.0433C42.7983 28.2173 54.1915 14.308 69.6673 12.976C85.1431 11.6441 98.8413 23.3937 100.263 39.2197C101.685 55.0457 90.2914 68.955 74.8155 70.287C59.3397 71.619 45.6416 59.8693 44.2199 44.0433Z"
+                            fill="url(#paint1_linear_12_886)" />
+                        <path
+                            d="M0.446826 61.6216C-0.974818 45.7956 10.4184 31.8863 25.8942 30.5543C41.37 29.2223 55.0682 40.972 56.4898 56.798C57.9114 72.624 46.5183 86.5333 31.0424 87.8653C15.5666 89.1972 1.86847 77.4476 0.446826 61.6216Z"
+                            fill="url(#paint2_linear_12_886)" />
+                        <path
+                            d="M9.33604 31.9795C7.9144 16.1535 19.3076 2.24422 34.7834 0.912223C50.2593 -0.419775 63.9574 11.3299 65.379 27.1559C66.8007 42.9819 55.4075 56.8911 39.9316 58.2231C24.4558 59.5551 10.7577 47.8055 9.33604 31.9795Z"
+                            fill="url(#paint3_linear_12_886)" />
+                        <defs>
+                            <linearGradient id="paint0_linear_12_886" x1="54.8875" y1="100.879" x2="46.1989"
+                                y2="-0.0702986" gradientUnits="userSpaceOnUse">
+                                <stop stop-color="#6EC9B1" />
+                            </linearGradient>
+                            <linearGradient id="paint1_linear_12_886" x1="54.8875" y1="100.879" x2="46.1989"
+                                y2="-0.0702986" gradientUnits="userSpaceOnUse">
+                                <stop stop-color="#6EC9B1" />
+                            </linearGradient>
+                            <linearGradient id="paint2_linear_12_886" x1="54.8875" y1="100.879" x2="46.1989"
+                                y2="-0.0702986" gradientUnits="userSpaceOnUse">
+                                <stop stop-color="#6EC9B1" />
+                            </linearGradient>
+                            <linearGradient id="paint3_linear_12_886" x1="54.8875" y1="100.879" x2="46.1989"
+                                y2="-0.0702986" gradientUnits="userSpaceOnUse">
+                                <stop stop-color="#6EC9B1" />
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                    <span>2</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

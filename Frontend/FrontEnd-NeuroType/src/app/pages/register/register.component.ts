@@ -5,6 +5,9 @@ import { RegisterService } from '../../services/register.service';
 import { takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { User } from '../../types/user';
+import { AuthService } from '../../services/auth.service';
+import { LoginService } from '../../services/login.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -17,7 +20,7 @@ export class RegisterComponent implements OnInit {
   private unsubscribe$ = new Subject<void>();
   form: FormGroup;
 
-  constructor(formBuilder : FormBuilder, private registerService:RegisterService){
+  constructor(formBuilder : FormBuilder, private registerService:RegisterService, private authService: AuthService, private loginService: LoginService, private router: Router){
     this.form = formBuilder.group({
       name: ['', [Validators.required, Validators.minLength(2)]],
       email: ['',[Validators.required, Validators.email]],
@@ -65,7 +68,18 @@ export class RegisterComponent implements OnInit {
         email: this.form.get('email')?.value,
         password: this.form.get('password')?.value,
       };
-      this.registerService.register(user)
+      this.registerService.register(user).subscribe({
+        next: (response) =>{
+          const token = response.token;
+          this.registerService.setUserRegistered(true)
+          this.authService.setToken(token)
+          this.loginService.setUserLogged(true)
+          this.router.navigateByUrl('/dashboard')
+        }, 
+        error: (err)=>{
+          console.error('Algo salio mal en la peticion al servidor', err)
+        }
+      })
     } else {
       console.log('Formulario no válido');
     }

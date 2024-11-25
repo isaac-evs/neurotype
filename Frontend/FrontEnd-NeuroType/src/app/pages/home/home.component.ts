@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -9,6 +10,10 @@ import { Component } from '@angular/core';
 })
 export class HomeComponent {
   theme: boolean = false;
+
+  constructor(private router: Router){
+
+  }
 
 
   handleTheme():void{
@@ -24,5 +29,9 @@ export class HomeComponent {
       document.documentElement.style.setProperty('--secondary-color', 'black');
       document.documentElement.style.setProperty('--third-color', '#6d6d6d');
     }
+  }
+
+  getStarted(){
+    this.router.navigateByUrl('/login')
   }
 }

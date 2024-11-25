@@ -1,0 +1,92 @@
+.main{
+    width: 100%;
+    height: 91.5vh;
+    display: flex;
+    justify-content: space-between;
+}
+
+.firstRow{
+    height: 100%;
+    width: 78%;
+    background-color: white;
+    border-radius: 20px;
+    box-sizing: border-box;
+    padding: 3vh;
+    span{
+        font-size: 2.5vh;
+    }
+
+    .calendar{
+        display: flex;
+        flex-wrap: wrap;
+        box-sizing: border-box;
+        padding: 5vh;
+        padding-top: 0;
+        justify-content: flex-start;
+        gap: 1vh;
+        .day{
+            width: 12%;
+            height: 7.5vh;
+            margin-top: 3vh;
+            padding: 1vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            &.activeDate{
+                background-color: purple;
+            }
+            span{
+                font-size: 3vh;
+                padding: 2vh;
+                padding-left: 2.5vh;
+                padding-right: 2.5vh;
+                border-radius: 50%;
+                z-index: 2;
+            }
+
+        }
+        .week{
+            span{
+                font-weight: 600;
+            }
+        }
+        .figure{
+            position: absolute;
+            z-index: 1;
+            svg{
+                height: 15vh;
+            }
+            &.yellow{
+                left: 0.5vh;
+            }
+        }
+    }
+}
+
+.secondRow{
+    height: 100%;
+    width: 20%;
+    background-color: white;
+    border-radius: 20px;
+    box-sizing: border-box;
+    padding: 3vh;
+    span{
+        font-size: 2.5vh;
+    }
+    display: flex;
+    flex-direction: column;
+    svg{
+        align-self: center;
+        margin-top: 3vh;
+    }
+    .description{
+        display: flex;
+        flex-direction: column;
+        margin-top: 3vh;
+        span{
+            font-size: 3vh;
+            word-spacing: 2.5vh;
+        }
+    }
+}

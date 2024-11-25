@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpService } from './http.service';
-import {BehaviorSubject } from 'rxjs';
+import {BehaviorSubject, Observable } from 'rxjs';
 import { AuthService } from './auth.service';
 
 @Injectable({
@@ -14,14 +14,15 @@ export class LoginService {
 
   constructor(private httpService:HttpService, private authService: AuthService) { }
 
-  login(credentials:{email:string, password:string}){
-    this.httpService.post<{token: string}>(this.apiUrl, credentials).subscribe((response)=>{
-      this.userLogedSubject.next(true)
-      this.authService.setToken(response.token)
-    });
+  login(credentials: {email: string, password: string}): Observable<{ token: string }> {
+    return this.httpService.post<{ token: string }>(this.apiUrl, credentials);
   }
 
   isUserLoged(){
     return this.userLogedSubject.value;
+  }
+
+  setUserLogged(value : boolean){
+    this.userLogedSubject.next(value)
   }
 }

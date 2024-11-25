@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpService } from './http.service';
 import { AuthService } from './auth.service';
-import { BehaviorSubject, map } from 'rxjs';
+import { BehaviorSubject, map, Observable } from 'rxjs';
 import { User } from '../types/user';
 import { Notes } from '../types/notes';
 
@@ -34,5 +34,14 @@ export class UserService {
       console.warn('No se encontró un token de autenticación.');
     }
 
+  }
+
+  postNote(note : string) : Observable<any>{
+    const token = this.authService.getToken()
+    if(token){
+       return this.httpService.post(this.apiUrl,{note})
+    }else {
+      throw new Error('Token no disponible. El usuario no está autenticado.');
+    }
   }
 }

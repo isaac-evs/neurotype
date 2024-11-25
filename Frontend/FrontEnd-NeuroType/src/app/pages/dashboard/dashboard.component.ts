@@ -1,11 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { UserService } from '../../services/user.service';
 import { Notes } from '../../types/notes';
+import { SidebarComponent } from '../../components/layout/sidebar/sidebar.component';
+import { RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [],
+  imports: [SidebarComponent,RouterOutlet],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss'
 })
@@ -27,5 +29,5 @@ export class DashboardComponent implements OnInit {
 
     this.userService.getUserData(); 
       
-  } //para mostrar la infromacion del usuario hay que modificar el html con notes etc etc
+  } 
 }

@@ -14,14 +14,16 @@ export class RegisterService {
 
   constructor(private httpService: HttpService) {}
 
-  register(userData: User) {
-    console.log(this.apiUrl,userData);
-    this.httpService.post(this.apiUrl, userData).subscribe(() => {
-      this.userRegisteredSubject.next(true);
-    });
+  register(userData: User): Observable<{token: string}> {
+    console.log(this.apiUrl, userData);
+    return this.httpService.post(this.apiUrl, userData);
   }
 
   isUserRegistered(): boolean {
     return this.userRegisteredSubject.value;  
+  }
+
+  setUserRegistered(value: boolean){
+    this.userRegisteredSubject.next(value)
   }
 }

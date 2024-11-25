@@ -1,0 +1,21 @@
+.body{
+    width: 100%;
+    height: 100vh;
+    background-color: #d2d0cf;
+    position: relative;
+    box-sizing: border-box;
+    display: flex;
+
+    .content{
+        margin-top: 3vh;
+        margin-left: 18vh;
+        margin-right: 3vh;
+        overflow: hidden;
+        width: calc(100% - 18vh);
+    }
+}
+
+app-sidebar{
+    position: absolute;
+    z-index: 2;
+}

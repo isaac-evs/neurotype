@@ -17,7 +17,8 @@
             <input type="password" placeholder="Password" name="password" formControlName="password">
             <button type="submit" [disabled]="form.invalid">Log In</button>
         </form>
-        <span style="font-size: 2.8vh; margin-top: 2vh; color: gray;">Dont have an account? <a href="" style="text-decoration: none; color: black;">Sign Up</a></span>
+        <span id="errorMessage">{{errorMessage}}</span>
+        <span style="font-size: 2.8vh; margin-top: 2vh; color: gray;">Dont have an account? <a routerLink="/register" style="text-decoration: none; color: black;">Sign Up</a></span>
     </div>
     <div class="rightSide container">
         <img src="login.png" alt="started">
