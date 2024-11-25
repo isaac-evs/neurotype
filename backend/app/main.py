@@ -1,7 +1,7 @@
 from fastapi import FastAPI
-from app.api.endpoints import users
+from app.api.api import api_router
 from app.core.config import settings
 
-app = FastAPI(title="NeuroType")
+app = FastAPI(title=settings.PROJECT_NAME)
 
-app.include_router(users.router, prefix="/users", tags=["users"])
+app.include_router(api_router)

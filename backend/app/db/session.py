@@ -1,5 +1,6 @@
-from pymongo import MongoClient
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
 from app.core.config import settings
 
-client = MongoClient(settings.MONGODB_URL)
-db = client.get_default_database()
+engine = create_engine(settings.SQLALCHEMY_DATABASE_URI)
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
