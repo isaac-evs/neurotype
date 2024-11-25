@@ -21,7 +21,7 @@ def create_user(user_in: UserCreate):
     user_dict["id"] = str(result.inserted_id)
     return UserInDB(**user_dict)
 
-def autheticate_user(email: str, password: str):
+def authenticate_user(email: str, password: str):
     user = get_user_by_email(email)
     if not user:
         return False
