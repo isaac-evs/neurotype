@@ -1,28 +1,37 @@
-import { Injectable } from '@angular/core';
-import { HttpService } from './http.service';
-import {BehaviorSubject, Observable } from 'rxjs';
-import { AuthService } from './auth.service';
+import { Injectable } from "@angular/core";
+import { HttpService } from "./http.service";
+import { Observable, BehaviorSubject } from "rxjs";
+import { AuthService } from "./auth.service";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root",
 })
 export class LoginService {
-  private apiUrl = 'localhost:300/login';
+  private apiUrl = "/login";
 
-  private userLogedSubject = new BehaviorSubject<boolean>(false); 
-  public userLoged$ = this.userLogedSubject.asObservable();
+  private userLoggedSubject = new BehaviorSubject<boolean>(false);
+  public userLogged$ = this.userLoggedSubject.asObservable();
 
-  constructor(private httpService:HttpService, private authService: AuthService) { }
+  constructor(
+    private httpService: HttpService,
+    private authService: AuthService,
+  ) {}
 
-  login(credentials: {email: string, password: string}): Observable<{ token: string }> {
-    return this.httpService.post<{ token: string }>(this.apiUrl, credentials);
+  login(credentials: {
+    email: string;
+    password: string;
+  }): Observable<{ access_token: string }> {
+    return this.httpService.post<{ access_token: string }>(
+      this.apiUrl,
+      credentials,
+    );
   }
 
-  isUserLoged(){
-    return this.userLogedSubject.value;
+  setUserLogged(value: boolean): void {
+    this.userLoggedSubject.next(value);
   }
 
-  setUserLogged(value : boolean){
-    this.userLogedSubject.next(value)
+  isUserLogged(): boolean {
+    return this.userLoggedSubject.value;
   }
 }

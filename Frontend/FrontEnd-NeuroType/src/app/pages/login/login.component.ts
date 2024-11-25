@@ -1,56 +1,56 @@
-import { Component, OnInit } from '@angular/core';
-import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
-import { LoginService } from '../../services/login.service';
-import { Router, RouterModule } from '@angular/router';
-import { CommonModule } from '@angular/common';
-import { response } from 'express';
+import { Component, OnInit } from "@angular/core";
+import {
+  FormBuilder,
+  FormGroup,
+  ReactiveFormsModule,
+  Validators,
+} from "@angular/forms";
+import { LoginService } from "../../services/login.service";
+import { Router } from "@angular/router";
+import { CommonModule } from "@angular/common";
 
 @Component({
-  selector: 'app-login',
+  selector: "app-login",
   standalone: true,
-  imports: [FormsModule,ReactiveFormsModule, RouterModule, CommonModule],
-  templateUrl: './login.component.html',
-  styleUrl: './login.component.scss'
+  imports: [ReactiveFormsModule, CommonModule],
+  templateUrl: "./login.component.html",
+  styleUrls: ["./login.component.scss"],
 })
 export class LoginComponent implements OnInit {
-
   form: FormGroup;
-  errorMessage: string = '';
+  errorMessage: string = "";
 
-
-  constructor(formBuilder : FormBuilder, private loginService:LoginService, private router:Router){
-    this.form = formBuilder.group({
-      email: ['',[Validators.required, Validators.email]],
-      password: ['',[ Validators.required, Validators.minLength(8)]]
+  constructor(
+    private formBuilder: FormBuilder,
+    private loginService: LoginService,
+    private router: Router,
+  ) {
+    this.form = this.formBuilder.group({
+      email: ["", [Validators.required, Validators.email]],
+      password: ["", [Validators.required, Validators.minLength(8)]],
     });
   }
 
   ngOnInit(): void {
-      this.loginService.userLoged$.subscribe((isLogged)=>{
-        if(isLogged){
-          console.log('usuario logeado')
-        }
-      })
+    this.loginService.userLogged$.subscribe((isLogged: boolean) => {
+      if (isLogged) {
+        console.log("User logged in");
+      }
+    });
   }
 
-  login(){
-    if(this.form.valid){
-      console.log(this.form.getRawValue())
+  login(): void {
+    if (this.form.valid) {
       this.loginService.login(this.form.getRawValue()).subscribe({
         next: (response) => {
-          this.loginService.setUserLogged(true)
-          this.router.navigateByUrl('/dashboard')
+          this.loginService.setUserLogged(true);
+          this.router.navigateByUrl("/dashboard");
         },
-        error: (err) =>{
-          console.error('Error al iniciar sesión:', err);
-          this.errorMessage = 'Credenciales incorrectas o hubo un problema con el servidor.';
-          this.loginService.setUserLogged(false);
-
-        }
-      })
-    }else{
-      console.log('formulario no valido')
+        error: (err) => {
+          console.error("Login error:", err);
+          this.errorMessage = "Invalid credentials or server issue.";
+        },
+      });
     }
   }
-
 }
