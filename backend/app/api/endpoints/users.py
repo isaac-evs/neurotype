@@ -59,6 +59,8 @@ def login_access_token(
     return {"access_token": access_token, "token_type": "bearer"}
 
 
+### Ensure your backend’s /select-plan endpoint accepts a string ("lite" or "plus").
+### If necessary, update the frontend to send the plan in the expected format (e.g., as a JSON object).
 @router.put(
     "/select-plan",
     response_model=schemas.User,

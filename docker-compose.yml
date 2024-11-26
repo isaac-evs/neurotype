@@ -1,20 +1,40 @@
-version: "3.8"
+version: "3.8" # Specify the Docker Compose version
 
 services:
   backend:
     build:
       context: ./backend
+      dockerfile: Dockerfile # Ensure Dockerfile is named correctly
     ports:
       - "8000:8000"
     env_file:
-      - .env
+      - ./backend/.env # Specify the path to your .env file
+    volumes:
+      - ./backend:/app # Mount backend code for live-reloading (optional)
+      - backend-node-modules:/app/node_modules # Named volume for backend
+    networks:
+      - neurotype-network
 
   frontend:
     build:
-      context: ./Frontend/FrontEnd-Neurotype
+      context: ./frontend/neurotype-frontend
+      dockerfile: Dockerfile # Ensure Dockerfile is named correctly
     ports:
-      - "4200:4200"
+      - "5173:5173"
     depends_on:
       - backend
     environment:
-      - API_URL=http://backend:8000
+      - VITE_API_URL=http://backend:8000 # Adjust based on your frontend configuration
+    volumes:
+      - ./frontend/neurotype-frontend:/app # Mount frontend code for live-reloading
+      - frontend-node-modules:/app/node_modules # Named volume for frontend
+    networks:
+      - neurotype-network
+
+networks:
+  neurotype-network:
+    driver: bridge
+
+volumes:
+  backend-node-modules:
+  frontend-node-modules:
