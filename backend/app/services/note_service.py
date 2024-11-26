@@ -1,9 +1,10 @@
 from sqlalchemy.orm import Session
-from datetime import datetime
-from typing import Optional
-
 from app.models.note import Note
 from app.schemas.note import NoteCreate, NoteUpdate
+from app.core.analysis import analyze_text
+
+from datetime import datetime
+from typing import Optional
 
 def get_note_by_id(db: Session, note_id: int):
     return db.query(Note).filter(Note.id == note_id).first()
@@ -12,7 +13,19 @@ def get_notes_by_user(db: Session, user_id: int):
     return db.query(Note).filter(Note.user_id == user_id).all()
 
 def create_user_note(db: Session, note_in: NoteCreate, user_id: int):
-    note = Note(**note_in.dict(), user_id=user_id)
+
+    emotion_counts = analyze_text(note_in.text)
+
+    note_data = note_in.dict()
+    note_data.update({
+        "user_id": user_id,
+        "happy_count": emotion_counts["happy"],
+        "calm_count": emotion_counts["calm"],
+        "sad_count": emotion_counts["sad"],
+        "upset_count": emotion_counts["upset"],
+    })
+
+    note = Note(**note_data)
     db.add(note)
     db.commit()
     db.refresh(note)

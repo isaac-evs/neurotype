@@ -11,4 +11,10 @@ class Note(Base):
     created_at = Column(DateTime, default=datetime.utcnow)
     user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
 
+    # emotion counts
+    happy_count = Column(Integer, default=0)
+    calm_count = Column(Integer, default=0)
+    sad_count = Column(Integer, default=0)
+    upset_count = Column(Integer, default=0)
+
     user = relationship("User", back_populates="notes")
