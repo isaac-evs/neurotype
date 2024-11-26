@@ -1,12 +1,15 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, File, UploadFile
 from sqlalchemy.orm import Session
 from fastapi.security import OAuth2PasswordRequestForm
+
 
 from app import schemas
 from app.api import deps
 from app.core.security import create_access_token, verify_password
+from app.core.s3 import upload_file_to_s3
+from app.core.config import settings
 from app.models.user import User
-from app.services.user_service import create_user, get_user_by_email
+from app.services.user_service import create_user, get_user_by_email, update_user_plan, update_user_profile
 
 router = APIRouter()
 
@@ -54,3 +57,56 @@ def login_access_token(
         raise HTTPException(status_code=400, detail="Incorrect email or password")
     access_token = create_access_token(subject=str(user.id))
     return {"access_token": access_token, "token_type": "bearer"}
+
+
+@router.put(
+    "/select-plan",
+    response_model=schemas.User,
+    summary="Select a plan",
+    description="Allows the user to select a plan: lite or plus."
+)
+def select_plan(
+    *,
+    db: Session = Depends(deps.get_db),
+    plan_in: schemas.PlanType,
+    current_user: User = Depends(deps.get_current_user)
+):
+
+    if plan_in not in schemas.PlanType:
+        raise HTTPException(status_code=400, detail="Invalid plan type")
+    user = update_user_plan(db, user=current_user, plan=plan_in)
+    return user
+
+router.put(
+    "/profile",
+    response_model=schemas.User,
+    summary="Update user profile",
+    description="Allows the user to update their name and upload a profile photo."
+)
+def update_profile(
+    *,
+    db: Session = Depends(deps.get_db),
+    name: str = None,
+    file: UploadFile = File(None),
+    current_user: User = Depends(deps.get_current_user)
+):
+    """
+    Updates the user's profile.
+
+    - **name**: The user's name.
+    - **file**: The profile photo to upload.
+    """
+    update_data = {}
+    if name:
+        update_data["name"] = name
+
+    if file:
+        # Upload the file to S3
+        s3_url = upload_file_to_s3(file, settings.AWS_S3_BUCKET_NAME)
+        update_data["profile_photo_url"] = s3_url
+
+    if update_data:
+        user = update_user_profile(db, user=current_user, update_data=update_data)
+        return user
+    else:
+        raise HTTPException(status_code=400, detail="No data to update")

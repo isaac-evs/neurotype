@@ -13,3 +13,4 @@ pytest
 requests
 websockets
 openai
+boto3
