@@ -1,6 +1,8 @@
 from typing import List
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
+from typing import Optional
+from datetime import datetime
 
 from app import schemas
 from app.api import deps
@@ -11,10 +13,15 @@ router = APIRouter()
 
 @router.get("/", response_model=List[schemas.Note])
 def read_notes(
+    *,
     db: Session = Depends(deps.get_db),
     current_user: User = Depends(deps.get_current_user),
+    start_date: Optional[datetime] = None,
+    end_date: Optional[datetime] = None,
 ):
-    notes = note_service.get_notes_by_user(db, user_id=current_user.id)
+    notes = note_service.get_notes_by_user_and_date(
+        db, user_id=current_user.id, start_date=start_date, end_date=end_date
+    )
     return notes
 
 @router.post("/", response_model=schemas.Note)
