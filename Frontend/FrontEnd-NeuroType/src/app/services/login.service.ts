@@ -2,6 +2,8 @@ import { Injectable } from "@angular/core";
 import { HttpService } from "./http.service";
 import { Observable, BehaviorSubject } from "rxjs";
 import { AuthService } from "./auth.service";
+import { User, UserLogin } from "../types/user";
+import { HttpHeaders } from "@angular/common/http";
 
 @Injectable({
   providedIn: "root",
@@ -17,14 +19,17 @@ export class LoginService {
     private authService: AuthService,
   ) {}
 
-  login(credentials: {
-    email: string;
-    password: string;
-  }): Observable<{ access_token: string }> {
-    return this.httpService.post<{ access_token: string }>(
-      this.apiUrl,
-      credentials,
-    );
+  login(user: UserLogin): Observable<any> {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/x-www-form-urlencoded',
+    });
+  
+    // Construimos el cuerpo en formato x-www-form-urlencoded
+    const body = new URLSearchParams();
+    body.set('username', user.username);
+    body.set('password', user.password);
+  
+    return this.httpService.post<any>('/login', body.toString(), { headers });
   }
 
   setUserLogged(value: boolean): void {

@@ -76,17 +76,13 @@ export class RegisterComponent implements OnInit, OnDestroy {
   signUp(): void {
     if (this.form.valid) {
       const user = {
-        name: this.form.get("name")?.value,
         email: this.form.get("email")?.value,
         password: this.form.get("password")?.value,
       };
       this.registerService.register(user).subscribe({
-        next: (response) => {
-          const token = response.access_token;
+        next: () => {
           this.registerService.setUserRegistered(true);
-          this.authService.setToken(token);
-          this.loginService.setUserLogged(true);
-          this.router.navigateByUrl("/dashboard");
+          this.router.navigateByUrl('/dashboard')
         },
         error: (err) => {
           console.error("Algo salió mal en la petición al servidor", err);

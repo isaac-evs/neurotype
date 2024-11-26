@@ -8,6 +8,9 @@ import {
 import { LoginService } from "../../services/login.service";
 import { Router } from "@angular/router";
 import { CommonModule } from "@angular/common";
+import { AuthService } from "../../services/auth.service";
+
+import { UserLogin } from "../../types/user";
 
 @Component({
   selector: "app-login",
@@ -23,7 +26,8 @@ export class LoginComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private loginService: LoginService,
-    private router: Router,
+    private authService: AuthService,
+    private router: Router
   ) {
     this.form = this.formBuilder.group({
       email: ["", [Validators.required, Validators.email]],
@@ -41,12 +45,19 @@ export class LoginComponent implements OnInit {
 
   login(): void {
     if (this.form.valid) {
-      this.loginService.login(this.form.getRawValue()).subscribe({
+      const user: UserLogin = {
+        username: this.form.get("email")?.value,
+        password: this.form.get("password")?.value,
+      };
+      this.loginService.login(user).subscribe({
         next: (response) => {
+          const token = response.access_token;
+          this.authService.setToken(token);
           this.loginService.setUserLogged(true);
-          this.router.navigateByUrl("/dashboard");
+          this.router.navigateByUrl('dashboard')
         },
         error: (err) => {
+          console.log(user)
           console.error("Login error:", err);
           this.errorMessage = "Invalid credentials or server issue.";
         },

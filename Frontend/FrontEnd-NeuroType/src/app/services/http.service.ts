@@ -1,6 +1,7 @@
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { AuthService } from "./auth.service";
+import { Observable } from "rxjs";
 
 @Injectable({
   providedIn: "root",
@@ -18,11 +19,8 @@ export class HttpService {
     return this.httpClient.get<T>(`${this.apiUrl}${endpoint}`, { headers });
   }
 
-  post<T>(endpoint: string, body: any) {
-    const headers = this.createAuthHeaders();
-    return this.httpClient.post<T>(`${this.apiUrl}${endpoint}`, body, {
-      headers,
-    });
+  post<T>(endpoint: string, body: any, options?: { headers?: HttpHeaders }): Observable<T> {
+    return this.httpClient.post<T>(`${this.apiUrl}${endpoint}`, body, options);
   }
 
   private createAuthHeaders(): HttpHeaders {
