@@ -1,3 +1,5 @@
+version: "3.8"
+
 services:
   backend:
     build:
@@ -11,6 +13,8 @@ services:
     build:
       context: ./Frontend/FrontEnd-Neurotype
     ports:
-      - "4200:80"
+      - "4200:4200"
     depends_on:
       - backend
+    environment:
+      - API_URL=http://backend:8000
