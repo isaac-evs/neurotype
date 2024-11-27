@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, HTTPException, File, UploadFile
+from fastapi import APIRouter, Depends, HTTPException, File, UploadFile, Form
 from sqlalchemy.orm import Session
 from fastapi.security import OAuth2PasswordRequestForm
 
@@ -88,7 +88,7 @@ def select_plan(
 def update_profile(
     *,
     db: Session = Depends(deps.get_db),
-    name: str = None,
+    name: str = Form(None),
     file: UploadFile = File(None),
     current_user: User = Depends(deps.get_current_user)
 ):
