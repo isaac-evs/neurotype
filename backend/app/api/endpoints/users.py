@@ -4,6 +4,7 @@ from fastapi.security import OAuth2PasswordRequestForm
 from pydantic import BaseModel
 from google.oauth2 import id_token
 from google.auth.transport import requests as google_requests
+import logging
 
 from app import schemas
 from app.api import deps
@@ -12,6 +13,8 @@ from app.core.s3 import upload_file_to_s3
 from app.core.config import settings
 from app.models.user import User
 from app.services.user_service import create_user, get_user_by_email, update_user_plan, update_user_profile
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter()
 
@@ -133,11 +136,7 @@ def authenticate_google(
     db: Session = Depends(deps.get_db),
     google_auth: GoogleAuth
 ):
-    """
-    Authenticates a user using Google ID token.
-
-    - **id_token**: Google ID token obtained from the frontend.
-    """
+    logger.info("Received Google authentication request.")
     try:
         # Verify the token with Google
         idinfo = id_token.verify_oauth2_token(
@@ -145,29 +144,62 @@ def authenticate_google(
             google_requests.Request(),
             settings.GOOGLE_CLIENT_ID
         )
+        logger.info("Google ID token verified successfully.")
 
-        # ID token is valid. Get the user's Google Account ID and email
+        # Extract user information
         google_user_id = idinfo['sub']
         email = idinfo['email']
         name = idinfo.get('name', '')
+        logger.debug(f"Google User ID: {google_user_id}, Email: {email}, Name: {name}")
 
-    except ValueError:
-        # Invalid token
+    except ValueError as e:
+        logger.error(f"Invalid Google ID token: {e}")
         raise HTTPException(status_code=400, detail="Invalid Google ID token")
 
     # Check if user exists
     user = get_user_by_email(db, email=email)
-    if not user:
-        # Create a new user
+    if user:
+        logger.info(f"User with email {email} already exists.")
+    else:
+        logger.info(f"Creating new user with email {email}.")
+        # Create a new user with name
         user_in = schemas.UserCreate(
             email=email,
-            password=google_user_id  # Use Google user ID as a placeholder password
+            password=google_user_id,  # Consider a more secure approach
+            name=name
         )
-        user = create_user(db, user_in=user_in)
-        user.name = name
-        db.commit()
-        db.refresh(user)
+        try:
+            user = create_user(db, user_in=user_in)
+            db.commit()
+            db.refresh(user)
+            logger.info(f"User {user.id} created successfully.")
+        except Exception as e:
+            logger.error(f"Error creating user: {e}")
+            raise HTTPException(status_code=500, detail="Error creating user")
 
     # Generate JWT token
-    access_token = create_access_token(subject=str(user.id))
+    try:
+        access_token = create_access_token(subject=str(user.id))
+        logger.info(f"Access token created for user {user.id}.")
+    except Exception as e:
+        logger.error(f"Error creating access token: {e}")
+        raise HTTPException(status_code=500, detail="Error generating access token")
+
     return {"access_token": access_token, "token_type": "bearer"}
+
+
+@router.get(
+    "/users/me",
+    response_model=schemas.User,
+    summary="Get current user",
+    description="Retrieve the current authenticated user's information."
+)
+def read_users_me(current_user: User = Depends(deps.get_current_user)):
+    """
+    Retrieves the current authenticated user's information.
+
+    - **current_user**: Retrieved via dependency injection from the JWT token.
+    """
+    if not current_user:
+        raise HTTPException(status_code=404, detail="User not found")
+    return current_user
