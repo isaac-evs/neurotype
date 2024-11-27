@@ -16,7 +16,7 @@ export const RegisterPage = () => {
         password: password,
       });
       alert("Registration successful");
-      navigate("/login");
+      navigate("/select-plan");
     } catch (error) {
       console.error("Registration error:", error);
       alert("Error registering user");

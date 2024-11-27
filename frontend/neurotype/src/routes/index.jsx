@@ -5,6 +5,7 @@ import {
   Route,
   Navigate,
 } from "react-router-dom";
+import { LandingPage } from "../pages/LandingPage";
 import { LoginPage } from "../pages/LoginPage";
 import { RegisterPage } from "../pages/RegisterPage";
 import { DashboardPage } from "../pages/DashboardPage";
@@ -18,36 +19,25 @@ import { AuthContext } from "../context/AuthContext";
 import React, { useContext } from "react";
 
 export const AppRoutes = () => {
-  const { token } = useContext(AuthContext);
+  const { token, user } = useContext(AuthContext);
 
   return (
     <Router>
       <Routes>
-        <Route
-          path="/"
-          element={
-            token ? (
-              <Navigate to="/dashboard" />
-            ) : (
-              <Navigate to="/login" replace />
-            )
-          }
-        />
+        <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
+        <Route
+          path="/select-plan"
+          element={
+            token ? <SelectPlanPage /> : <Navigate to="/login" replace />
+          }
+        />
         <Route
           path="/dashboard"
           element={
             <PrivateRoute>
               <DashboardPage />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/select-plan"
-          element={
-            <PrivateRoute>
-              <SelectPlanPage />
             </PrivateRoute>
           }
         />
