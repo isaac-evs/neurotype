@@ -9,7 +9,7 @@ class PlanType(str, Enum):
 class UserBase(BaseModel):
     email: EmailStr
     name: Optional[str] = None
-    plan: Optional[PlanType] = PlanType.lite
+    plan: PlanType = PlanType.lite
     profile_photo_url: Optional[str] = None
 
 class UserCreate(UserBase):
