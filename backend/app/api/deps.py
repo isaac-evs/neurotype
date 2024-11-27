@@ -1,5 +1,5 @@
 from typing import Generator
-from fastapi import Depends, HTTPException, status, WebSocket
+from fastapi import Depends, HTTPException, status, WebSocket, WebSocketException
 from fastapi.security import OAuth2PasswordBearer, OAuth2AuthorizationCodeBearer
 from jose import jwt, JWTError
 from sqlalchemy.orm import Session
@@ -38,21 +38,21 @@ def get_current_user(
 
 async def get_current_user_websocket(
     websocket: WebSocket,
-    token: str = Depends(oauth2_scheme),
     db: Session = Depends(get_db)
 ) -> User:
-    credentials_exception = HTTPException(
-        status_code=status.WS_1008_POLICY_VIOLATION,
-        detail="Could not validate credentials",
-    )
+    token = websocket.query_params.get("token")
+    if token is None:
+        await websocket.close(code=status.WS_1008_POLICY_VIOLATION)
+        raise WebSocketException(code=status.WS_1008_POLICY_VIOLATION)
+
     try:
         payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
         user_id: int = int(payload.get("sub"))
     except (JWTError, ValueError):
         await websocket.close(code=status.WS_1008_POLICY_VIOLATION)
-        raise credentials_exception
+        raise WebSocketException(code=status.WS_1008_POLICY_VIOLATION)
     user = db.query(User).filter(User.id == user_id).first()
     if user is None:
         await websocket.close(code=status.WS_1008_POLICY_VIOLATION)
-        raise credentials_exception
+        raise WebSocketException(code=status.WS_1008_POLICY_VIOLATION)
     return user

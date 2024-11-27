@@ -17,24 +17,18 @@ services:
 
   frontend:
     build:
-      context: ./frontend/neurotype-frontend
-      dockerfile: Dockerfile # Ensure Dockerfile is named correctly
+      context: ./frontend/neurotype
+      dockerfile: Dockerfile
     ports:
-      - "5173:5173"
-    depends_on:
-      - backend
-    environment:
-      - VITE_API_URL=http://backend:8000 # Adjust based on your frontend configuration
-    volumes:
-      - ./frontend/neurotype-frontend:/app # Mount frontend code for live-reloading
-      - frontend-node-modules:/app/node_modules # Named volume for frontend
+      - "80:80"
     networks:
       - neurotype-network
+    depends_on:
+      - backend
+
+volumes:
+  backend-node-modules:
 
 networks:
   neurotype-network:
     driver: bridge
-
-volumes:
-  backend-node-modules:
-  frontend-node-modules:
