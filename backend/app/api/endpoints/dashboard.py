@@ -83,4 +83,5 @@ def get_dashboard(
         emotion_counts=total_emotion_counts,
         weekly_emotion_data=weekly_emotion_data,
         prevalent_emotion_today=prevalent_emotion_today,
+        plan=current_user.plan,
     )

@@ -82,6 +82,30 @@ export const DashboardPage = () => {
             </div>
           </div>
 
+          {/* Action Buttons */}
+          <div className="flex space-x-4">
+            <button
+              onClick={() => navigate("/notes")}
+              className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded shadow text-lg"
+            >
+              Notes
+            </button>
+            <button
+              onClick={() => navigate("/calendar")}
+              className="bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded shadow text-lg"
+            >
+              Calendar
+            </button>
+            {dashboardData.plan === "plus" && (
+              <button
+                onClick={() => navigate("/chat")}
+                className="bg-purple-500 hover:bg-purple-600 text-white px-6 py-3 rounded shadow text-lg"
+              >
+                Chat
+              </button>
+            )}
+          </div>
+
           {/* Prevalent Emotion */}
           <div className="bg-white p-6 rounded-lg shadow">
             <h3 className="text-lg font-semibold text-gray-800 mb-2">

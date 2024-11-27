@@ -1,4 +1,3 @@
-// src/pages/NoteDetailPage.jsx
 import React, { useState, useEffect, useContext } from "react";
 import axiosInstance from "../api/axiosInstance";
 import { useParams, useNavigate } from "react-router-dom";
@@ -63,43 +62,51 @@ export const NoteDetailPage = () => {
   };
 
   return (
-    <div className="p-6">
-      <button onClick={() => navigate("/notes")} className="text-blue-500 mb-4">
-        Back to Notes
+    <div className="bg-gray-50 min-h-screen p-6">
+      <button
+        onClick={() => navigate("/notes")}
+        className="text-blue-500 hover:text-blue-600 mb-4"
+      >
+        &larr; Back to Notes
       </button>
-      {isEditing || noteId === "new" ? (
-        <>
-          <textarea
-            className="border p-2 w-full h-64 mb-4"
-            value={note.text}
-            onChange={(e) => setNote({ ...note, text: e.target.value })}
-          ></textarea>
-          <button
-            onClick={handleSave}
-            className="bg-green-500 text-white p-2 rounded mr-2"
-          >
-            Save
-          </button>
-          {noteId !== "new" && (
+      <div className="bg-white p-6 rounded-lg shadow">
+        {isEditing || noteId === "new" ? (
+          <>
+            <textarea
+              className="border border-gray-300 rounded p-4 w-full h-64 focus:outline-none focus:ring focus:ring-blue-200 mb-4"
+              value={note.text}
+              onChange={(e) => setNote({ ...note, text: e.target.value })}
+              placeholder="Write your note here..."
+            ></textarea>
+            <div className="flex space-x-4">
+              <button
+                onClick={handleSave}
+                className="bg-green-500 hover:bg-green-600 text-white px-6 py-2 rounded shadow"
+              >
+                Save
+              </button>
+              {noteId !== "new" && (
+                <button
+                  onClick={handleDelete}
+                  className="bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded shadow"
+                >
+                  Delete
+                </button>
+              )}
+            </div>
+          </>
+        ) : (
+          <>
+            <p className="text-gray-700 text-lg mb-4">{note.text}</p>
             <button
-              onClick={handleDelete}
-              className="bg-red-500 text-white p-2 rounded"
+              onClick={() => setIsEditing(true)}
+              className="bg-yellow-500 hover:bg-yellow-600 text-white px-6 py-2 rounded shadow"
             >
-              Delete
+              Edit
             </button>
-          )}
-        </>
-      ) : (
-        <>
-          <p>{note.text}</p>
-          <button
-            onClick={() => setIsEditing(true)}
-            className="bg-yellow-500 text-white p-2 rounded mt-4"
-          >
-            Edit
-          </button>
-        </>
-      )}
+          </>
+        )}
+      </div>
     </div>
   );
 };
