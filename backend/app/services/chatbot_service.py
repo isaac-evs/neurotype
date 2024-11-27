@@ -2,20 +2,24 @@ import os
 import openai
 from datetime import date, timedelta
 
+from app.db.session import SessionLocal
 from app.services import note_service
 from sqlalchemy.orm import Session
+from app.models.user import User
 
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
-def get_chatbot_response(user_message: str, current_user: User, db: Session) -> str:
+async def get_chatbot_response(user_message: str, current_user: User) -> str:
     # Fetch notes for the current week
     today = date.today()
     start_of_week = today - timedelta(days=today.weekday())  # Monday
     end_of_week = start_of_week + timedelta(days=6)  # Sunday
 
+    db = SessionLocal()
     notes = note_service.get_notes_by_user_and_date(
         db, user_id=current_user.id, start_date=start_of_week, end_date=end_of_week
     )
+    db.close()
 
     # Summarize the emotions from the notes
     total_emotion_counts = {
@@ -41,7 +45,8 @@ def get_chatbot_response(user_message: str, current_user: User, db: Session) -> 
         f"Assistant:"
     )
 
-    response = openai.Completion.create(
+    # Call OpenAI API asynchronously
+    response = await openai.Completion.acreate(
         engine="text-davinci-003",
         prompt=prompt,
         max_tokens=150,
