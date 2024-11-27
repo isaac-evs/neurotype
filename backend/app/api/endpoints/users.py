@@ -1,7 +1,9 @@
 from fastapi import APIRouter, Depends, HTTPException, File, UploadFile, Form
 from sqlalchemy.orm import Session
 from fastapi.security import OAuth2PasswordRequestForm
-
+from pydantic import BaseModel
+from google.oauth2 import id_token
+from google.auth.transport import requests as google_requests
 
 from app import schemas
 from app.api import deps
@@ -37,6 +39,8 @@ def register_user(
     return user
 
 
+# users.py
+
 @router.post(
     "/login",
     response_model=schemas.Token,
@@ -46,15 +50,17 @@ def register_user(
 def login_access_token(
     db: Session = Depends(deps.get_db), form_data: OAuth2PasswordRequestForm = Depends()
 ):
-    """
-    Authenticates a user and returns a JWT access token.
-
-    - **username**: User's email (used as the username).
-    - **password**: User's password.
-    """
     user = get_user_by_email(db, email=form_data.username)
-    if not user or not verify_password(form_data.password, user.hashed_password):
+    if not user:
         raise HTTPException(status_code=400, detail="Incorrect email or password")
+
+    # If the user was created via Google, they shouldn't use password login
+    if user.hashed_password == form_data.password:
+        raise HTTPException(status_code=400, detail="Use Google Sign-In to authenticate")
+
+    if not verify_password(form_data.password, user.hashed_password):
+        raise HTTPException(status_code=400, detail="Incorrect email or password")
+
     access_token = create_access_token(subject=str(user.id))
     return {"access_token": access_token, "token_type": "bearer"}
 
@@ -112,3 +118,56 @@ def update_profile(
         return user
     else:
         raise HTTPException(status_code=400, detail="No data to update")
+
+class GoogleAuth(BaseModel):
+    id_token: str
+
+@router.post(
+    "/auth/google",
+    response_model=schemas.Token,
+    summary="Authenticate with Google",
+    description="Authenticate a user using Google Sign-In and return a JWT token."
+)
+def authenticate_google(
+    *,
+    db: Session = Depends(deps.get_db),
+    google_auth: GoogleAuth
+):
+    """
+    Authenticates a user using Google ID token.
+
+    - **id_token**: Google ID token obtained from the frontend.
+    """
+    try:
+        # Verify the token with Google
+        idinfo = id_token.verify_oauth2_token(
+            google_auth.id_token,
+            google_requests.Request(),
+            settings.GOOGLE_CLIENT_ID
+        )
+
+        # ID token is valid. Get the user's Google Account ID and email
+        google_user_id = idinfo['sub']
+        email = idinfo['email']
+        name = idinfo.get('name', '')
+
+    except ValueError:
+        # Invalid token
+        raise HTTPException(status_code=400, detail="Invalid Google ID token")
+
+    # Check if user exists
+    user = get_user_by_email(db, email=email)
+    if not user:
+        # Create a new user
+        user_in = schemas.UserCreate(
+            email=email,
+            password=google_user_id  # Use Google user ID as a placeholder password
+        )
+        user = create_user(db, user_in=user_in)
+        user.name = name
+        db.commit()
+        db.refresh(user)
+
+    # Generate JWT token
+    access_token = create_access_token(subject=str(user.id))
+    return {"access_token": access_token, "token_type": "bearer"}
