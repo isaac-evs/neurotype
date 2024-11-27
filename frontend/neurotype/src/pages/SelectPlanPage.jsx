@@ -26,7 +26,7 @@ export const SelectPlanPage = () => {
         },
       );
       alert("Plan selected successfully");
-      navigate("/dashboard"); // Redirect to the dashboard after selecting a plan
+      navigate("/profile"); // Redirect to the dashboard after selecting a plan
     } catch (error) {
       console.error(
         "Plan selection error:",

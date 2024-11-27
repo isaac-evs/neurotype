@@ -24,7 +24,7 @@ export const LoginPage = () => {
       });
 
       login(response.data.access_token);
-      navigate("/");
+      navigate("/dashboard");
     } catch (error) {
       console.error("Login error:", error);
       alert("Invalid credentials");
