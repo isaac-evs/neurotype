@@ -12,7 +12,7 @@ export const AuthProvider = ({ children }) => {
   useEffect(() => {
     if (token) {
       // Fetch user data if needed
-      setUser({}); // Replace with actual user fetching logic
+      setUser({}); // You can implement fetching user data here
     } else {
       setUser(null);
     }

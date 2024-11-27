@@ -79,7 +79,7 @@ def select_plan(
     user = update_user_plan(db, user=current_user, plan=plan_in)
     return user
 
-router.put(
+@router.put(
     "/profile",
     response_model=schemas.User,
     summary="Update user profile",

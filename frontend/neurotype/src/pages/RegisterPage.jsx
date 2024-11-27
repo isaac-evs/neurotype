@@ -1,22 +1,40 @@
 // src/pages/RegisterPage.jsx
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import axiosInstance from "../api/axiosInstance";
 import { useNavigate, Link } from "react-router-dom";
+import { AuthContext } from "../context/AuthContext";
 
 export const RegisterPage = () => {
   const navigate = useNavigate();
+  const { login } = useContext(AuthContext); // Access the login function from AuthContext
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      // Register the user
       await axiosInstance.post("/register", {
         email: email,
         password: password,
       });
-      alert("Registration successful");
-      navigate("/select-plan");
+
+      // Automatically log in the user after successful registration
+      const data = new URLSearchParams();
+      data.append("username", email);
+      data.append("password", password);
+
+      const response = await axiosInstance.post("/login", data, {
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+      });
+
+      // Store the token in AuthContext
+      login(response.data.access_token);
+
+      alert("Registration and login successful");
+      navigate("/select-plan"); // Redirect to select plan after successful registration and login
     } catch (error) {
       console.error("Registration error:", error);
       alert("Error registering user");

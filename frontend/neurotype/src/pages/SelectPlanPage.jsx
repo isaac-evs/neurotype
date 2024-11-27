@@ -6,27 +6,30 @@ import { useNavigate } from "react-router-dom";
 
 export const SelectPlanPage = () => {
   const navigate = useNavigate();
-  const { token } = useContext(AuthContext); // Retrieve the token from the context
+  const { token } = useContext(AuthContext);
   const [plan, setPlan] = useState("lite");
+
+  if (!token) {
+    navigate("/login");
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // Make a PUT request to the /select-plan endpoint with plan_in as a query parameter
       await axiosInstance.put(
         "/select-plan",
-        {}, // Empty request body
+        {},
         {
           headers: {
             Authorization: `Bearer ${token}`,
           },
           params: {
-            plan_in: plan, // Include plan_in as a query parameter
+            plan_in: plan,
           },
         },
       );
       alert("Plan selected successfully");
-      navigate("/profile"); // Redirect to the dashboard after selecting a plan
+      navigate("/profile");
     } catch (error) {
       console.error(
         "Plan selection error:",
