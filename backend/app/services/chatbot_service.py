@@ -1,13 +1,12 @@
 import os
-import openai
+from openai import OpenAI
 from datetime import date, timedelta
-
 from app.db.session import SessionLocal
 from app.services import note_service
-from sqlalchemy.orm import Session
 from app.models.user import User
 
-openai.api_key = os.getenv("OPENAI_API_KEY")
+# Initialize the OpenAI client
+client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 async def get_chatbot_response(user_message: str, current_user: User) -> str:
     # Fetch notes for the current week
@@ -38,21 +37,18 @@ async def get_chatbot_response(user_message: str, current_user: User) -> str:
     prevalent_emotion = max(total_emotion_counts, key=total_emotion_counts.get)
 
     # Include the emotional summary in the prompt
-    prompt = (
-        f"You are a mental health assistant.\n"
-        f"The user's prevalent emotion this week has been {prevalent_emotion}.\n"
-        f"User: {user_message}\n"
-        f"Assistant:"
-    )
+    messages = [
+        {"role": "system", "content": "You are a mental health assistant."},
+        {"role": "assistant", "content": f"The user's prevalent emotion this week has been {prevalent_emotion}."},
+        {"role": "user", "content": user_message},
+    ]
 
-    # Call OpenAI API asynchronously
-    response = await openai.Completion.acreate(
-        engine="text-davinci-003",
-        prompt=prompt,
+    # Call OpenAI ChatCompletion API asynchronously
+    response = await client.chat.completions.create(
+        model="gpt-3.5-turbo",
+        messages=messages,
         max_tokens=150,
-        n=1,
-        stop=["\n", "User:", "Assistant:"],
         temperature=0.7,
     )
-    answer = response.choices[0].text.strip()
+    answer = response.choices[0].message.content.strip()
     return answer
