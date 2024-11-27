@@ -1,12 +1,12 @@
 import os
-from openai import OpenAI
+from openai import AsyncOpenAI
 from datetime import date, timedelta
 from app.db.session import SessionLocal
 from app.services import note_service
 from app.models.user import User
 
-# Initialize the OpenAI client
-client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
+# Initialize the AsyncOpenAI client
+client = AsyncOpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 async def get_chatbot_response(user_message: str, current_user: User) -> str:
     # Fetch notes for the current week
