@@ -2,6 +2,8 @@ from fastapi import APIRouter, WebSocket, WebSocketDisconnect, Depends
 from typing import List
 import json
 
+from sqlalchemy.orm import Session
+from app.db.session import SessionLocal
 from app.api import deps
 from app.models.user import User
 from app.services.chatbot_service import get_chatbot_response
@@ -38,19 +40,22 @@ async def websocket_endpoint(
     current_user: User = Depends(deps.get_current_user_websocket),
 ):
     user_id = current_user.id
+    db = SessionLocal()
     await manager.connect(user_id, websocket)
     try:
         while True:
-                    data = await websocket.receive_text()
-                    message = json.loads(data)
-                    if message["type"] == "message":
-                        user_message = message["content"]
-                        # Process the message and get a response from the chatbot
-                        response = get_chatbot_response(user_message)
-                        # Send the response back to the user
-                        await manager.send_personal_message(
-                            json.dumps({"type": "response", "content": response}),
-                            websocket
-                        )
+            data = await websocket.receive_text()
+            message = json.loads(data)
+            if message["type"] == "message":
+                user_message = message["content"]
+                # Process the message and get a response from the chatbot
+                response = get_chatbot_response(user_message, current_user, db)
+                # Send the response back to the user
+                await manager.send_personal_message(
+                    json.dumps({"type": "response", "content": response}),
+                    websocket
+                )
     except WebSocketDisconnect:
         manager.disconnect(user_id, websocket)
+    finally:
+        db.close()

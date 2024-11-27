@@ -3,7 +3,7 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from sqlalchemy import func
 from typing import Optional
-from datetime import datetime, date
+from datetime import datetime, date, timedelta
 
 from app import schemas
 from app.api import deps
@@ -90,3 +90,48 @@ def get_daily_analysis(
         total_counts=total_counts,
         notes=notes
     )
+
+@router.get("/emotions-summary", response_model=List[schemas.DailyEmotionSummary])
+def get_emotions_summary(
+    *,
+    db: Session = Depends(deps.get_db),
+    current_user: User = Depends(deps.get_current_user),
+    start_date: date,
+    end_date: date,
+):
+    """
+    Get the prevalent emotion for each day within a date range.
+    """
+    # Adjust end_date to include the entire day
+    end_date = end_date + timedelta(days=1)
+
+    # Query to aggregate emotion counts per day
+    emotion_summaries = db.query(
+        func.date(Note.created_at).label('date'),
+        func.sum(Note.happy_count).label('happy'),
+        func.sum(Note.calm_count).label('calm'),
+        func.sum(Note.sad_count).label('sad'),
+        func.sum(Note.upset_count).label('upset'),
+    ).filter(
+        Note.user_id == current_user.id,
+        Note.created_at >= start_date,
+        Note.created_at < end_date
+    ).group_by(
+        func.date(Note.created_at)
+    ).all()
+
+    # Prepare the response data
+    result = []
+    for summary in emotion_summaries:
+        emotions = {
+            'happy': summary.happy or 0,
+            'calm': summary.calm or 0,
+            'sad': summary.sad or 0,
+            'upset': summary.upset or 0
+        }
+        prevalent_emotion = max(emotions, key=emotions.get)
+        result.append(schemas.DailyEmotionSummary(
+            date=summary.date,
+            prevalent_emotion=prevalent_emotion
+        ))
+    return result

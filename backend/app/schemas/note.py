@@ -35,3 +35,7 @@ class DailyAnalysis(BaseModel):
 
     class Config:
         orm_mode = True
+
+class DailyEmotionSummary(BaseModel):
+    date: date
+    prevalent_emotion: str

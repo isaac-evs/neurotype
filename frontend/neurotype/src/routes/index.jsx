@@ -12,11 +12,13 @@ import { DashboardPage } from "../pages/DashboardPage";
 import { NotesPage } from "../pages/NotesPage";
 import { NoteDetailPage } from "../pages/NoteDetailPage";
 import { RecommendationsPage } from "../pages/RecommendationsPage";
-import { DataExportPage } from "../pages/DataExportPage";
 import { SelectPlanPage } from "../pages/SelectPlanPage";
 import { ProfilePage } from "../pages/ProfilePage";
 import { PrivateRoute } from "../components/PrivateRoute";
 import { AuthContext } from "../context/AuthContext";
+import { CalendarPage } from "../pages/CalendarPage";
+import { ExportDataPage } from "../pages/ExportDataPage";
+import { ChatPage } from "../pages/ChatPage";
 import React, { useContext } from "react";
 
 export const AppRoutes = () => {
@@ -63,6 +65,10 @@ export const AppRoutes = () => {
           }
         />
         <Route
+          path="/calendar"
+          element={token ? <CalendarPage /> : <Navigate to="/login" replace />}
+        />
+        <Route
           path="/recommendations"
           element={
             <PrivateRoute>
@@ -71,12 +77,14 @@ export const AppRoutes = () => {
           }
         />
         <Route
-          path="/data/export"
+          path="/export"
           element={
-            <PrivateRoute>
-              <DataExportPage />
-            </PrivateRoute>
+            token ? <ExportDataPage /> : <Navigate to="/login" replace />
           }
+        />
+        <Route
+          path="/chat"
+          element={token ? <ChatPage /> : <Navigate to="/login" replace />}
         />
       </Routes>
     </Router>

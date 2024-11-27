@@ -36,11 +36,8 @@ def get_current_user(
         raise credentials_exception
     return user
 
-async def get_current_user_websocket(
-    websocket: WebSocket,
-    db: Session = Depends(get_db)
-) -> User:
-    token = websocket.query_params.get("token")
+async def get_current_user_websocket(websocket: WebSocket) -> User:
+    token = websocket.cookies.get("token")
     if token is None:
         await websocket.close(code=status.WS_1008_POLICY_VIOLATION)
         raise WebSocketException(code=status.WS_1008_POLICY_VIOLATION)
@@ -51,7 +48,10 @@ async def get_current_user_websocket(
     except (JWTError, ValueError):
         await websocket.close(code=status.WS_1008_POLICY_VIOLATION)
         raise WebSocketException(code=status.WS_1008_POLICY_VIOLATION)
+
+    db = SessionLocal()
     user = db.query(User).filter(User.id == user_id).first()
+    db.close()
     if user is None:
         await websocket.close(code=status.WS_1008_POLICY_VIOLATION)
         raise WebSocketException(code=status.WS_1008_POLICY_VIOLATION)

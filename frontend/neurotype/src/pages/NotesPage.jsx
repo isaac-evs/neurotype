@@ -28,8 +28,14 @@ export const NotesPage = () => {
 
   return (
     <div className="bg-gray-50 min-h-screen p-6">
+      {/* Back to Dashboard Button */}
       <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold text-gray-700">Your Notes</h1>
+        <button
+          onClick={() => navigate("/dashboard")}
+          className="text-blue-500 hover:text-blue-600"
+        >
+          &larr; Back to Dashboard
+        </button>
         <Link
           to="/notes/new"
           className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded shadow"
@@ -37,6 +43,7 @@ export const NotesPage = () => {
           + New Note
         </Link>
       </div>
+      <h1 className="text-3xl font-bold text-gray-700 mb-6">Your Notes</h1>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {notes.map((note) => (
           <Link

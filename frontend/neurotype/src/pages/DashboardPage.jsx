@@ -81,7 +81,6 @@ export const DashboardPage = () => {
               </p>
             </div>
           </div>
-
           {/* Action Buttons */}
           <div className="flex space-x-4">
             <button
@@ -96,10 +95,16 @@ export const DashboardPage = () => {
             >
               Calendar
             </button>
+            <button
+              onClick={() => navigate("/export")}
+              className="bg-purple-500 hover:bg-purple-600 text-white px-6 py-3 rounded shadow text-lg"
+            >
+              Export Data
+            </button>
             {dashboardData.plan === "plus" && (
               <button
                 onClick={() => navigate("/chat")}
-                className="bg-purple-500 hover:bg-purple-600 text-white px-6 py-3 rounded shadow text-lg"
+                className="bg-yellow-500 hover:bg-yellow-600 text-white px-6 py-3 rounded shadow text-lg"
               >
                 Chat
               </button>
@@ -115,7 +120,6 @@ export const DashboardPage = () => {
               {dashboardData.prevalent_emotion_today || "No data"}
             </p>
           </div>
-
           {/* Weekly Emotion Counts */}
           <div className="bg-white p-6 rounded-lg shadow">
             <h3 className="text-lg font-semibold text-gray-800 mb-4">
@@ -148,7 +152,6 @@ export const DashboardPage = () => {
               </div>
             </div>
           </div>
-
           {/* Weekly Emotion Chart */}
           <div className="bg-white p-6 rounded-lg shadow">
             <h3 className="text-lg font-semibold text-gray-800 mb-4">
