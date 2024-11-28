@@ -3,9 +3,11 @@
 import React, { useEffect, useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 import axiosInstance from "../api/axiosInstance";
+import { useNavigate } from "react-router-dom";
 
 const GoogleLoginButton = () => {
   const { login } = useContext(AuthContext);
+  const navigate = useNavigate();
 
   useEffect(() => {
     /* global google */
@@ -39,10 +41,13 @@ const GoogleLoginButton = () => {
       login(res.data.access_token);
 
       alert("Google Sign-In successful");
-      // Redirect to desired page, e.g., dashboard
-      window.location.href = "/dashboard";
+
+      navigate("/select-plan");
     } catch (error) {
-      console.error("Google Sign-In error:", error);
+      console.error(
+        "Google Sign-In error:",
+        error.response?.data || error.message,
+      );
       alert("Error during Google Sign-In");
     }
   };
