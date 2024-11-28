@@ -5,6 +5,7 @@ from pydantic import BaseModel
 from google.oauth2 import id_token
 from google.auth.transport import requests as google_requests
 import logging
+import secrets
 
 from app import schemas
 from app.api import deps
@@ -147,25 +148,34 @@ def authenticate_google(
         logger.info("Google ID token verified successfully.")
 
         # Extract user information
-        google_user_id = idinfo['sub']
         email = idinfo['email']
         name = idinfo.get('name', '')
-        logger.debug(f"Google User ID: {google_user_id}, Email: {email}, Name: {name}")
+        logger.debug(f"Google Email: {email}, Name: {name}")
+
+        # Validate token claims (optional)
+        if idinfo['iss'] not in ['accounts.google.com', 'https://accounts.google.com']:
+            logger.error("Invalid issuer in Google ID token.")
+            raise HTTPException(status_code=400, detail="Invalid issuer in ID token")
 
     except ValueError as e:
         logger.error(f"Invalid Google ID token: {e}")
         raise HTTPException(status_code=400, detail="Invalid Google ID token")
+    except Exception as e:
+        logger.error(f"Unexpected error during token verification: {e}")
+        raise HTTPException(status_code=500, detail="Internal server error")
 
     # Check if user exists
     user = get_user_by_email(db, email=email)
     if user:
         logger.info(f"User with email {email} already exists.")
+        is_new_user = False
     else:
         logger.info(f"Creating new user with email {email}.")
-        # Create a new user with name
+        # Generate a secure random password
+        random_password = secrets.token_urlsafe(16)
         user_in = schemas.UserCreate(
             email=email,
-            password=google_user_id,  # Consider a more secure approach
+            password=random_password,
             name=name
         )
         try:
@@ -173,8 +183,10 @@ def authenticate_google(
             db.commit()
             db.refresh(user)
             logger.info(f"User {user.id} created successfully.")
+            is_new_user = True
         except Exception as e:
             logger.error(f"Error creating user: {e}")
+            db.rollback()
             raise HTTPException(status_code=500, detail="Error creating user")
 
     # Generate JWT token
@@ -185,7 +197,7 @@ def authenticate_google(
         logger.error(f"Error creating access token: {e}")
         raise HTTPException(status_code=500, detail="Error generating access token")
 
-    return {"access_token": access_token, "token_type": "bearer"}
+    return {"access_token": access_token, "token_type": "bearer", "is_new_user": is_new_user}
 
 
 @router.get(

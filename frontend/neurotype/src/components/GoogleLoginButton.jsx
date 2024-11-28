@@ -42,7 +42,11 @@ const GoogleLoginButton = () => {
 
       alert("Google Sign-In successful");
 
-      navigate("/select-plan");
+      if (res.data.is_new_user) {
+        navigate("/select-plan");
+      } else {
+        navigate("/dashboard");
+      }
     } catch (error) {
       console.error(
         "Google Sign-In error:",
