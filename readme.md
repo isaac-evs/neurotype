@@ -159,7 +159,7 @@ Clone the project
 Setup Environment variables
 
 ```bash
-  cd backend/app
+  cd backend
 ```
 
 (insert variables)
