@@ -152,6 +152,10 @@ Clone the project
   git clone https://github.com/isaac-evs/neurotype.git
 ```
 
+```bash
+  cd neurotype
+```
+
 Setup Environment variables
 
 ```bash
