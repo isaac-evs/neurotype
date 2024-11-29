@@ -38,7 +38,7 @@ Other Tools:
 - Docker & Docker Compose
 - Nginx
 
- ### Project Structure
+ ## Project Structure
 
 ```bash
 ├── backend
@@ -134,14 +134,14 @@ Other Tools:
 │       └── vite.config.js
 └── readme.md
 ```
-## Getting Started
+# Getting Started
 
 ### Requirements
 
 - Docker & Docker Compose
 - Node.js
  
-### Run Locally
+## Run Locally
 
 Clone the project
 
@@ -172,7 +172,7 @@ Access the Application:
 	•	Backend API: http://localhost:8000/docs (Swagger UI)
 
 
-### Environment Variables
+## Environment Variables
 
 To run this project, you will need to add the following environment variables to your .env file
 
