@@ -10,21 +10,17 @@ const GoogleLoginButton = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    /* global google */
     if (window.google) {
       window.google.accounts.id.initialize({
         client_id:
-          "556952347377-ujs9djrl3t27lbtkvopn3u9fk61ot62j.apps.googleusercontent.com", // Replace with your Google Client ID
+          "556952347377-ujs9djrl3t27lbtkvopn3u9fk61ot62j.apps.googleusercontent.com",
         callback: handleCredentialResponse,
       });
 
       window.google.accounts.id.renderButton(
         document.getElementById("google-signin-button"),
-        { theme: "outline", size: "large" }, // customization attributes
+        { theme: "outline", size: "large" },
       );
-
-      // Optionally, prompt the user to select an account
-      // window.google.accounts.id.prompt();
     }
   }, []);
 
