@@ -20,7 +20,7 @@ https://neurotype-prod-frontend.onrender.com
 
 ### Technologies Used
 
-- Frontend:
+Frontend:
 - React.js
 - Tailwind CSS
 - Framer Motion
@@ -28,20 +28,20 @@ https://neurotype-prod-frontend.onrender.com
 - React Icons
 - Recharts
 
-- Backend:
+Backend:
 - FastAPI
 - Socket.IO
 - Postgres AWS RDS 
 - AWS S3 for storage
   
-- Other Tools:
+Other Tools:
 - Docker & Docker Compose
 - Nginx
 
  ### Project Structure
 
 ```bash
- ├── backend
+├── backend
 │   ├── Dockerfile
 │   ├── app
 │   │   ├── __init__.py
