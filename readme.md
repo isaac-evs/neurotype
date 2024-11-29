@@ -10,31 +10,33 @@ https://neurotype-prod-frontend.onrender.com
 
 ### Features
 
-	•	User Authentication: Secure registration and login with Google Sign-In integration.
-	•	Plan Selection: Choose between Lite and Plus plans to access different features.
-	•	Dashboard: Comprehensive overview of user activities, emotion tracking, and data visualization.
-	•	Notes Management: Create, view, and manage personal notes.
-	•	Emotion Tracking: Monitor and analyze emotions over time with detailed charts.
-	•	Data Export: Export your data securely for personal use.
-	•	Chat Support: (Plus Plan) Access AI-driven chat support for enhanced assistance.
+- User Authentication: Secure registration and login with Google Sign-In integration.
+- Plan Selection: Choose between Lite and Plus plans to access different features.
+- Dashboard: Comprehensive overview of user activities, emotion tracking, and data visualization.
+- Notes Management: Create, view, and manage personal notes.
+- Emotion Tracking: Monitor and analyze emotions over time with detailed charts.
+- Data Export: Export your data securely for personal use.
+- Chat Support: (Plus Plan) Access AI-driven chat support for enhanced assistance.
 
 ### Technologies Used
 
-	•	Frontend:
-	•	React.js
-	•	Tailwind CSS
-	•	Framer Motion
-	•	Vite
-	•	React Icons
-	•	Backend:
-	•	FastAPI
-	•	Python
-	•	SQLAlchemy
-	•	AWS S3 for storage
-	•	Other Tools:
-	•	Docker & Docker Compose
-	•	Nginx
-	•	Recharts for data visualization
+- Frontend:
+- React.js
+- Tailwind CSS
+- Framer Motion
+- Vite
+- React Icons
+- Recharts
+
+- Backend:
+- FastAPI
+- Socket.IO
+- Postgres AWS RDS 
+- AWS S3 for storage
+  
+- Other Tools:
+- Docker & Docker Compose
+- Nginx
 
  ### Project Structure
 
@@ -132,12 +134,14 @@ https://neurotype-prod-frontend.onrender.com
 │       └── vite.config.js
 └── readme.md
 ```
-### Getting Started
+## Getting Started
 
-	•	Docker & Docker Compose
-	•	Node.js
+### Requirements
+
+- Docker & Docker Compose
+- Node.js
  
-## Run Locally
+### Run Locally
 
 Clone the project
 
@@ -168,7 +172,7 @@ Access the Application:
 	•	Backend API: http://localhost:8000/docs (Swagger UI)
 
 
-## Environment Variables
+### Environment Variables
 
 To run this project, you will need to add the following environment variables to your .env file
 
