@@ -134,9 +134,10 @@ Other Tools:
 │       └── vite.config.js
 └── readme.md
 ```
+
 # Getting Started
 
-### Requirements
+## Requirements
 
 - Docker & Docker Compose
 - Node.js
