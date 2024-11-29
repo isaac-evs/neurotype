@@ -2,6 +2,8 @@
 
 [Neurotype](https://neurotype-prod-frontend.onrender.com) is a modern, full-stack web application designed to help users manage their notes and track emotions.
 
+![App Screenshot](presentation.png)
+
 
 ## Website
 
