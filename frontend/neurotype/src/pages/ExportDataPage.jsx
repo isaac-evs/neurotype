@@ -13,16 +13,14 @@ export const ExportDataPage = () => {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-        responseType: "blob", // Ensures the response is treated as a file
+        responseType: "blob",
       });
 
-      // Create a blob from the response data
       const blob = new Blob([response.data], { type: "text/csv" });
 
-      // Create a link element to download the file
       const link = document.createElement("a");
       link.href = window.URL.createObjectURL(blob);
-      link.download = "notes.csv"; // Set the file name
+      link.download = "notes.csv";
       link.click();
     } catch (error) {
       console.error("Error exporting data:", error);

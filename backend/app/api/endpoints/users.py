@@ -43,8 +43,6 @@ def register_user(
     return user
 
 
-# users.py
-
 @router.post(
     "/login",
     response_model=schemas.Token,
@@ -58,7 +56,6 @@ def login_access_token(
     if not user:
         raise HTTPException(status_code=400, detail="Incorrect email or password")
 
-    # If the user was created via Google, they shouldn't use password login
     if user.hashed_password == form_data.password:
         raise HTTPException(status_code=400, detail="Use Google Sign-In to authenticate")
 
@@ -69,8 +66,6 @@ def login_access_token(
     return {"access_token": access_token, "token_type": "bearer"}
 
 
-### Ensure your backend’s /select-plan endpoint accepts a string ("lite" or "plus").
-### If necessary, update the frontend to send the plan in the expected format (e.g., as a JSON object).
 @router.put(
     "/select-plan",
     response_model=schemas.User,
@@ -139,7 +134,7 @@ def authenticate_google(
 ):
     logger.info("Received Google authentication request.")
     try:
-        # Verify the token with Google
+
         idinfo = id_token.verify_oauth2_token(
             google_auth.id_token,
             google_requests.Request(),
@@ -147,12 +142,10 @@ def authenticate_google(
         )
         logger.info("Google ID token verified successfully.")
 
-        # Extract user information
         email = idinfo['email']
         name = idinfo.get('name', '')
         logger.debug(f"Google Email: {email}, Name: {name}")
 
-        # Validate token claims (optional)
         if idinfo['iss'] not in ['accounts.google.com', 'https://accounts.google.com']:
             logger.error("Invalid issuer in Google ID token.")
             raise HTTPException(status_code=400, detail="Invalid issuer in ID token")
@@ -164,14 +157,13 @@ def authenticate_google(
         logger.error(f"Unexpected error during token verification: {e}")
         raise HTTPException(status_code=500, detail="Internal server error")
 
-    # Check if user exists
     user = get_user_by_email(db, email=email)
     if user:
         logger.info(f"User with email {email} already exists.")
         is_new_user = False
     else:
         logger.info(f"Creating new user with email {email}.")
-        # Generate a secure random password
+
         random_password = secrets.token_urlsafe(16)
         user_in = schemas.UserCreate(
             email=email,
@@ -189,7 +181,7 @@ def authenticate_google(
             db.rollback()
             raise HTTPException(status_code=500, detail="Error creating user")
 
-    # Generate JWT token
+    # JWT token
     try:
         access_token = create_access_token(subject=str(user.id))
         logger.info(f"Access token created for user {user.id}.")

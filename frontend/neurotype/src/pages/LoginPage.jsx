@@ -1,5 +1,3 @@
-// src/pages/LoginPage.jsx
-
 import React, { useState, useContext } from "react";
 import axiosInstance from "../api/axiosInstance";
 import { useNavigate, Link } from "react-router-dom";
@@ -13,40 +11,32 @@ export const LoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  // State variables for validation errors
   const [emailError, setEmailError] = useState("");
   const [generalError, setGeneralError] = useState("");
 
-  // Utility function to validate email format
   const validateEmail = (email) => {
-    // Simple regex for email validation
     const re = /\S+@\S+\.\S+/;
     return re.test(email);
   };
 
-  // Handler for form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Reset previous errors
     setEmailError("");
     setGeneralError("");
 
     let valid = true;
 
-    // Validate email
     if (!validateEmail(email)) {
       setEmailError("Please enter a valid email address.");
       valid = false;
     }
 
-    // If validation fails, do not proceed with login
     if (!valid) {
       return;
     }
 
     try {
-      // Authenticate the user
       const data = new URLSearchParams();
       data.append("username", email);
       data.append("password", password);
@@ -57,17 +47,14 @@ export const LoginPage = () => {
         },
       });
 
-      // Store the token in AuthContext
       login(response.data.access_token);
 
       alert("Login successful");
-      navigate("/dashboard"); // Redirect to dashboard after successful login
+      navigate("/dashboard");
     } catch (error) {
       console.error("Login error:", error);
 
-      // Handle specific error messages from the backend
       if (error.response) {
-        // Backend returned an error response
         if (error.response.status === 400) {
           const detail = error.response.data.detail;
           if (detail === "Invalid credentials.") {
@@ -79,12 +66,10 @@ export const LoginPage = () => {
           setGeneralError("An unexpected error occurred. Please try again.");
         }
       } else if (error.request) {
-        // No response received from backend
         setGeneralError(
           "No response from server. Please check your connection.",
         );
       } else {
-        // Other errors
         setGeneralError("An error occurred. Please try again.");
       }
     }

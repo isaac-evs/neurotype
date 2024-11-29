@@ -4,7 +4,7 @@ from typing import Optional, Dict, List
 from enum import Enum
 
 class DailyEmotionData(BaseModel):
-    date: str  # ISO date string
+    date: str  
     emotions: Dict[str, int]
 
 class PlanType(str, Enum):

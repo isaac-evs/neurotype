@@ -38,9 +38,9 @@ export const SelectPlanPage = () => {
           },
         },
       );
-      // Optionally, you can update user context or fetch updated user data here
+
       alert("Plan selected successfully");
-      navigate("/profile"); // Redirect to profile after plan selection
+      navigate("/profile");
     } catch (error) {
       console.error(
         "Plan selection error:",

@@ -102,10 +102,10 @@ def get_emotions_summary(
     """
     Get the prevalent emotion for each day within a date range.
     """
-    # Adjust end_date to include the entire day
+
     end_date = end_date + timedelta(days=1)
 
-    # Query to aggregate emotion counts per day
+
     emotion_summaries = db.query(
         func.date(Note.created_at).label('date'),
         func.sum(Note.happy_count).label('happy'),
@@ -120,7 +120,6 @@ def get_emotions_summary(
         func.date(Note.created_at)
     ).all()
 
-    # Prepare the response data
     result = []
     for summary in emotion_summaries:
         emotions = {

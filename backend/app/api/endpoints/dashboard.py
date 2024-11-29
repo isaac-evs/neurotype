@@ -20,8 +20,8 @@ def get_dashboard(
 
     # Calculate the start and end dates of the current week
     today = date.today()
-    start_of_week = today - timedelta(days=today.weekday())  # Monday
-    end_of_week = start_of_week + timedelta(days=6)  # Sunday
+    start_of_week = today - timedelta(days=today.weekday())  
+    end_of_week = start_of_week + timedelta(days=6)  
 
     # Fetch notes for the current week
     notes = note_service.get_notes_by_user_and_date(

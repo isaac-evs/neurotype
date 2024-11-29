@@ -1,50 +1,40 @@
-// src/pages/RegisterPage.jsx
-
 import React, { useState, useContext } from "react";
 import axiosInstance from "../api/axiosInstance";
 import { useNavigate, Link } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
-import zxcvbn from "zxcvbn"; // Optional: For password strength meter
+import zxcvbn from "zxcvbn";
 import { motion, AnimatePresence } from "framer-motion";
 
 export const RegisterPage = () => {
   const navigate = useNavigate();
-  const { login } = useContext(AuthContext); // Access the login function from AuthContext
+  const { login } = useContext(AuthContext);
 
-  // State variables for form inputs
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
-  // State variables for validation errors
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [confirmPasswordError, setConfirmPasswordError] = useState("");
   const [generalError, setGeneralError] = useState("");
 
-  // State variable for password strength (optional)
   const [passwordStrength, setPasswordStrength] = useState(0);
 
-  // Utility function to validate email format
   const validateEmail = (email) => {
-    // Simple regex for email validation
     const re = /\S+@\S+\.\S+/;
     return re.test(email);
   };
 
-  // Handler for password input change to evaluate strength (optional)
   const handlePasswordChange = (e) => {
     const newPassword = e.target.value;
     setPassword(newPassword);
     const evaluation = zxcvbn(newPassword);
-    setPasswordStrength(evaluation.score); // Score between 0 and 4
+    setPasswordStrength(evaluation.score);
   };
 
-  // Handler for form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Reset previous errors
     setEmailError("");
     setPasswordError("");
     setConfirmPasswordError("");
@@ -52,13 +42,11 @@ export const RegisterPage = () => {
 
     let valid = true;
 
-    // Validate email
     if (!validateEmail(email)) {
       setEmailError("Please enter a valid email address.");
       valid = false;
     }
 
-    // Validate password
     if (!password.trim()) {
       setPasswordError("Password cannot be empty.");
       valid = false;
@@ -67,25 +55,21 @@ export const RegisterPage = () => {
       valid = false;
     }
 
-    // Validate confirmation password
     if (password !== confirmPassword) {
       setConfirmPasswordError("Passwords do not match.");
       valid = false;
     }
 
-    // If validation fails, do not proceed with registration
     if (!valid) {
       return;
     }
 
     try {
-      // Register the user
       const registerResponse = await axiosInstance.post("/register", {
         email: email,
         password: password,
       });
 
-      // Automatically log in the user after successful registration
       const loginResponse = await axiosInstance.post(
         "/login",
         new URLSearchParams({
@@ -99,7 +83,6 @@ export const RegisterPage = () => {
         },
       );
 
-      // Store the token in AuthContext
       login(loginResponse.data.access_token);
 
       alert("Registration and login successful");
@@ -110,14 +93,11 @@ export const RegisterPage = () => {
       setConfirmPassword("");
       setPasswordStrength(0);
 
-      // Always navigate to select-plan after registration
-      navigate("/select-plan"); // Redirect to select plan for all users
+      navigate("/select-plan");
     } catch (error) {
       console.error("Registration error:", error);
 
-      // Handle specific error messages from the backend
       if (error.response) {
-        // Backend returned an error response
         if (error.response.status === 400) {
           const detail = error.response.data.detail;
           if (detail === "Password must be at least 8 characters long.") {
@@ -133,12 +113,10 @@ export const RegisterPage = () => {
           setGeneralError("An unexpected error occurred. Please try again.");
         }
       } else if (error.request) {
-        // No response received from backend
         setGeneralError(
           "No response from server. Please check your connection.",
         );
       } else {
-        // Other errors
         setGeneralError("An error occurred. Please try again.");
       }
     }
@@ -149,7 +127,7 @@ export const RegisterPage = () => {
       <motion.form
         className="bg-white p-8 rounded-lg shadow-lg w-80"
         onSubmit={handleSubmit}
-        noValidate // Prevent default HTML5 validation
+        noValidate
         initial={{ opacity: 0, scale: 0.8 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.6 }}
@@ -166,7 +144,7 @@ export const RegisterPage = () => {
             placeholder="Email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            required // Mark as required for accessibility
+            required
             whileFocus={{ borderColor: "#3B82F6", scale: 1.02 }}
           />
           {/* Email Error Message */}
@@ -194,9 +172,9 @@ export const RegisterPage = () => {
             }`}
             placeholder="Password"
             value={password}
-            onChange={handlePasswordChange} // Use handler for strength evaluation
-            required // Mark as required for accessibility
-            minLength={8} // HTML5 attribute for additional validation
+            onChange={handlePasswordChange}
+            required
+            minLength={8}
             whileFocus={{ borderColor: "#3B82F6", scale: 1.02 }}
           />
           {/* Password Error Message */}

@@ -1,5 +1,3 @@
-// src/context/AuthContext.jsx
-
 import React, { createContext, useState, useEffect } from "react";
 import axiosInstance from "../api/axiosInstance";
 
@@ -10,13 +8,12 @@ const TOKEN_KEY = "access_token";
 export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(localStorage.getItem(TOKEN_KEY));
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true); // To handle initial loading state
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchUser = async () => {
       if (token) {
         try {
-          // Fetch user data from backend
           const response = await axiosInstance.get("/users/me", {
             headers: {
               Authorization: `Bearer ${token}`,

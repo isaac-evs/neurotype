@@ -34,7 +34,6 @@ export const DashboardPage = () => {
     } else {
       fetchDashboardData();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [token]);
 
   const fetchDashboardData = async () => {
@@ -42,7 +41,6 @@ export const DashboardPage = () => {
       const response = await axiosInstance.get("/dashboard/");
       const data = response.data;
 
-      // Transform weekly_emotion_data for the chart
       const transformedData = data.weekly_emotion_data.map((item) => ({
         date: new Date(item.date).toLocaleDateString("en-US", {
           month: "short",
@@ -173,7 +171,6 @@ export const DashboardPage = () => {
               <span className="font-semibold">Export Data</span>
             </motion.button>
 
-            {/* Chat Button (Visible Only for Plus Plan) */}
             {dashboardData.plan === "plus" && (
               <motion.button
                 onClick={() => navigate("/chat")}

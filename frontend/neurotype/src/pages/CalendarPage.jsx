@@ -22,7 +22,6 @@ export const CalendarPage = () => {
 
   const fetchEmotionSummaries = async (startDate, endDate) => {
     try {
-      // If dates are not provided, use current month's range
       if (!startDate || !endDate) {
         startDate = moment().startOf("month").format("YYYY-MM-DD");
         endDate = moment().endOf("month").format("YYYY-MM-DD");
@@ -35,9 +34,8 @@ export const CalendarPage = () => {
         },
       });
 
-      // Map the data to events
       const eventsData = response.data.map((item) => ({
-        title: "", // We'll use custom rendering for events
+        title: "",
         start: new Date(item.date),
         end: new Date(item.date),
         allDay: true,
@@ -52,7 +50,6 @@ export const CalendarPage = () => {
   };
 
   const eventPropGetter = (event) => {
-    // Set background color based on prevalent emotion
     let backgroundColor = "#fff";
     switch (event.prevalentEmotion) {
       case "happy":
@@ -83,7 +80,6 @@ export const CalendarPage = () => {
     };
   };
 
-  // Custom event component to display emotion icons
   const EmotionEvent = ({ event }) => {
     let emoji = "";
     switch (event.prevalentEmotion) {

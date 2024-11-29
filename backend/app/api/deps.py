@@ -40,19 +40,19 @@ async def get_current_user_websocket(websocket: WebSocket) -> User:
     token = websocket.query_params.get("token")
     if token is None:
         await websocket.close(code=status.WS_1008_POLICY_VIOLATION)
-        return  # Do not raise an exception
+        return 
 
     try:
         payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
         user_id: int = int(payload.get("sub"))
     except (JWTError, ValueError):
         await websocket.close(code=status.WS_1008_POLICY_VIOLATION)
-        return  # Do not raise an exception
+        return  
 
     db = SessionLocal()
     user = db.query(User).filter(User.id == user_id).first()
     db.close()
     if user is None:
         await websocket.close(code=status.WS_1008_POLICY_VIOLATION)
-        return  # Do not raise an exception
+        return  
     return user

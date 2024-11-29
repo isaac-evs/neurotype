@@ -1,5 +1,3 @@
-// src/components/GoogleLoginButton.jsx
-
 import React, { useEffect, useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 import axiosInstance from "../api/axiosInstance";

@@ -16,16 +16,13 @@ logging.basicConfig(
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
 )
 
-# Create a Socket.IO server
 sio = socketio.AsyncServer(
     async_mode='asgi',
-    cors_allowed_origins=['http://localhost:3000'],  # Frontend origin
+    cors_allowed_origins=['http://localhost:3000'], 
 )
 
-# Create your FastAPI app
 fastapi_app = FastAPI()
 
-# Include your API routes
 fastapi_app.include_router(api_router)
 
 
@@ -38,10 +35,8 @@ fastapi_app.add_middleware(
     allow_headers=["*"],
 )
 
-# Wrap the FastAPI app with Socket.IO's ASGIApp AFTER all configurations
 app = socketio.ASGIApp(sio, other_asgi_app=fastapi_app)
 
-# Function to authenticate user
 async def authenticate_user(sid, token):
     try:
         payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
@@ -53,13 +48,11 @@ async def authenticate_user(sid, token):
     db.close()
     return user
 
-# Dictionary to keep track of connected users
 connected_users = {}
 
-# Event handler for client connection
 @sio.event
 async def connect(sid, environ):
-    # Get the token from the query parameters
+
     query_params = environ.get('asgi.scope').get('query_string', b'').decode()
     token = None
     for param in query_params.split('&'):
@@ -76,7 +69,6 @@ async def connect(sid, environ):
     connected_users[sid] = user
     print(f"User {user.id} connected with SID {sid}")
 
-# Event handler for receiving messages
 @sio.event
 async def message(sid, data):
     user = connected_users.get(sid)
@@ -85,12 +77,11 @@ async def message(sid, data):
         return
     user_message = data.get('message')
     if user_message:
-        # Get response from chatbot
+
         response = await get_chatbot_response(user_message, user)
-        # Send response back to the client
+
         await sio.emit('response', {'message': response}, room=sid)
 
-# Event handler for client disconnection
 @sio.event
 async def disconnect(sid):
     user = connected_users.pop(sid, None)

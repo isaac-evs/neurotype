@@ -31,9 +31,9 @@ Frontend:
 Backend:
 - FastAPI
 - Socket.IO
-- Postgres AWS RDS 
+- Postgres AWS RDS
 - AWS S3 for storage
-  
+
 Other Tools:
 - Docker & Docker Compose
 - Nginx
@@ -141,7 +141,7 @@ Other Tools:
 
 - Docker & Docker Compose
 - Node.js
- 
+
 ## Run Locally
 
 Clone the project
@@ -192,8 +192,23 @@ To run this project, you will need to add the following environment variables to
 `GOOGLE_CLIENT_SECRET`
 
 
+## Testing
 
+### Backend
 
+```bash
+    docker-compose up --build
+```
+In a new terminal window, run the following command to execute tests:
 
+```bash
+    docker-compose exec backend pytest
+```
 
- 
+### Frontend
+
+```bash
+   docker-compose up --build
+```
+The tests will run automatically when the cypress container is built.
+Be sure to have the backend container running before running the tests.

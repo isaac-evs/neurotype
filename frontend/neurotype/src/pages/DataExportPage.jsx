@@ -11,13 +11,12 @@ export const DataExportPage = () => {
   const handleExport = async () => {
     try {
       const response = await axiosInstance.get("/data/export", {
-        responseType: "blob", // Important for downloading files
+        responseType: "blob",
       });
       const url = window.URL.createObjectURL(new Blob([response.data]));
       const link = document.createElement("a");
       link.href = url;
-      link.setAttribute("download", "notes.csv"); // Or any other extension
-      document.body.appendChild(link);
+      link.setAttribute("download", "notes.csv");
       link.click();
     } catch (error) {
       console.error("Error exporting data:", error);

@@ -1,19 +1,17 @@
-# docker-compose.yml
-
-version: "3.8" # Specify the Docker Compose version
+version: "3.8"
 
 services:
   backend:
     build:
       context: ./backend
-      dockerfile: Dockerfile # Ensure Dockerfile is named correctly
+      dockerfile: Dockerfile
     ports:
       - "8000:8000"
     env_file:
-      - ./backend/.env # Specify the path to your .env file
+      - ./backend/.env
     volumes:
-      - ./backend:/app # Mount backend code for live-reloading (optional)
-      - backend-node-modules:/app/node_modules # Named volume for backend
+      - ./backend:/app
+      - backend-node-modules:/app/node_modules
     networks:
       - neurotype-network
 
@@ -27,6 +25,20 @@ services:
       - neurotype-network
     depends_on:
       - backend
+
+  cypress:
+    image: cypress/included:12.14.0
+    depends_on:
+      - frontend
+      - backend
+    environment:
+      - CYPRESS_baseUrl=http://frontend:80
+    volumes:
+      - ./frontend/neurotype:/e2e
+    working_dir: /e2e
+    command: npm run cypress:run
+    networks:
+      - neurotype-network
 
 volumes:
   backend-node-modules:

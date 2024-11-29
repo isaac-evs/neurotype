@@ -1,6 +1,6 @@
 import re
 
-# Define keywords for each emotion
+# keywords for each emotion
 EMOTION_KEYWORDS = {
     "happy": ["happy", "joyful", "elated", "refreshing", "shining"],
     "calm": ["calm", "relaxed", "peaceful", "serene"],

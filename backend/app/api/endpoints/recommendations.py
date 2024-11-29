@@ -12,6 +12,6 @@ def get_recommendations(
     db: Session = Depends(deps.get_db),
     current_user: User = Depends(deps.get_current_user),
 ):
-    # To do: recommendation logic
+    # To do: 
     recommendations = ["Recommendation 1", "Recommendation 2"]
     return {"recommendations": recommendations}

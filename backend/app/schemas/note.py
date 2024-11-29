@@ -16,7 +16,6 @@ class NoteInDBBase(NoteBase):
     created_at: datetime
     user_id: int
 
-    # New emotion count fields
     happy_count: int
     calm_count: int
     sad_count: int
