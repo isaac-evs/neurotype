@@ -1,3 +1,5 @@
+// src/pages/LoginPage.jsx
+
 import React, { useState, useContext } from "react";
 import axiosInstance from "../api/axiosInstance";
 import { useNavigate, Link } from "react-router-dom";
@@ -89,6 +91,7 @@ export const LoginPage = () => {
           <div className="mb-4">
             <motion.input
               type="email"
+              data-cy="email-input" // Added data-cy attribute
               className={`border p-2 w-full rounded ${
                 emailError ? "border-red-500" : "border-gray-300"
               }`}
@@ -118,6 +121,7 @@ export const LoginPage = () => {
           <div className="mb-4">
             <motion.input
               type="password"
+              data-cy="password-input" // Added data-cy attribute
               className={`border p-2 w-full rounded ${
                 generalError ? "border-red-500" : "border-gray-300"
               }`}
