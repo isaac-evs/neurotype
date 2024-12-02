@@ -218,3 +218,55 @@ In a new terminal window, run the following command to execute tests:
 ```
 The tests will run automatically when the cypress container is built.
 Be sure to have the backend container running before running the tests.
+
+### Cypress:
+(It actually doesnt work along docker, because it needs a separate host different that localhost, tried with docker internal host, but failed)
+### login existing user
+
+![cypress](cypress1.png)
+
+### register new user
+
+![cypress](cypress2.png)
+
+### should not login with incorrect credentials 
+
+![cypress](cypress3.png)
+
+### should not allow registration with similar mail 
+
+![cypress](cypress4.png)
+
+### Jest:
+
+```bash
+    cd frontend/neurotype
+```
+
+```bash
+    npm i 
+```
+
+```bash
+    npm test
+```
+
+Expected result:
+
+![jest](test1.png)
+
+### Validations:
+
+### email must be valid
+
+![validation](validation1.png)
+
+![validation](validation2.png)
+
+### passwords must match
+
+![validation](validation3.png)
+
+### passwords must be at least 8 characters long
+
+![validation](validation4.png)
